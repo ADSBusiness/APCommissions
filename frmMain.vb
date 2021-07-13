@@ -29,6 +29,7 @@ Public Class frmMain
     Public smtpUser As String
     Public smtpPswd As String
 
+    Public LogFile As String = Application.StartupPath & "EmailAlert - " & Format(Now, "yyyyMMdd") & ".txt"
     Public strLogLine As String = ""
 
     Public bDebug As Boolean = False
@@ -147,6 +148,8 @@ Public Class frmMain
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
         ' ================================
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Application Closed normally"
+        My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
+        strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -------------------------------------------------------------------------  "
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
         ' ================================
 
