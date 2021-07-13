@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Table>
+
+  <AppGeneral>
+    <SendEmail>Yes</SendEmail>
+    <SendSMS>Yes</SendSMS>
+  </AppGeneral>
+
+  <SQLConfig>
+    <SQL_DBServer>ADS003</SQL_DBServer>
+    <SQL_DB>ATSDAT</SQL_DB>
+    <SQL_User>sa</SQL_User>
+	<SQL_Pswd>Birch2020</SQL_Pswd>
+  </SQLConfig>
+  
+  <SMTPConfig>
+    <SMTP_Port>587</SMTP_Port>
+    <SMTP_SSL>True</SMTP_SSL>
+    <SMTP_Host>smtp.office365.com</SMTP_Host>
+	<SMTP_User>allan.smallie@adsbusiness.com.au</SMTP_User>
+	<SMTP_Pswd>Birch2019!!!!</SMTP_Pswd>
+  </SMTPConfig>
+
+</Table>
