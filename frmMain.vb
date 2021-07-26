@@ -22,7 +22,7 @@ Public Class frmMain
     Public sqlDB As String
     Public sqlUser As String
     Public sqlPswd As String
-    Public BuildVersion As String = "20210713.1"
+    Public BuildVersion As String = "20210726.1105"
     Public smtpHost As String
     Public smtpPort As String
     Public smtpSSL As String
@@ -31,6 +31,7 @@ Public Class frmMain
 
     Public LogFile As String = Application.StartupPath & "EmailAlert - " & Format(Now, "yyyyMMdd") & ".txt"
     Public strLogLine As String = ""
+
 
     Public bDebug As Boolean = False
 
@@ -46,8 +47,8 @@ Public Class frmMain
         Me.Label5.Text = ""
         Me.Label6.Text = ""
 
-        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
 
+        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
 
 
         Dim A4W As New SqlConnection()
@@ -59,12 +60,13 @@ Public Class frmMain
         Dim intCount As Decimal = 1
         Dim lRow As Integer = 0
         Dim iErr As Integer = 0
-        Dim lView(11) As String
+        Dim lView(16) As String
         Dim sItm As ListViewItem
 
         Dim Sdte As String = Me.dteExpDate.Value.ToString("yyyyMMdd")
 
-        sSQl = "select * from v_SMSAlert where EXPDATE='" & Sdte & "' order by expdate"
+        sSQl = "select * from v_SMSAlert where EXPDATE='" & Sdte & "' order by EXPDATE"
+        'sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
         ' ================================
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & sSQl
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
@@ -82,33 +84,53 @@ Public Class frmMain
             While SqlReader.Read()
 
                 lView(0) = intCount
-                lView(1) = Trim(SqlReader.Item(1))
-                lView(2) = Trim(SqlReader.Item(3))
-                lView(3) = Trim(SqlReader.Item(4))
-                lView(4) = Trim(SqlReader.Item(5))
-                lView(5) = Trim(SqlReader.Item(7))
-                lView(6) = Trim(SqlReader.Item(8))
-                lView(7) = Trim(SqlReader.Item(11))
-                lView(8) = Trim(SqlReader.Item(13))
-                lView(9) = Trim(SqlReader.Item(14))
-                lView(10) = Trim(SqlReader.Item(0))
-                lView(11) = Trim(SqlReader.Item(15))
+                lView(1) = Trim(SqlReader.Item(1))  ' Order #
+                lView(2) = Trim(SqlReader.Item(3))  ' Cust #
+                lView(3) = Trim(SqlReader.Item(4))  ' Name
+                lView(4) = Trim(SqlReader.Item(5))  ' City
+                lView(5) = Trim(SqlReader.Item(20))  ' Location
+                lView(6) = Trim(SqlReader.Item(7))  ' Rep
+                lView(7) = Trim(SqlReader.Item(9))  ' Name
+                lView(8) = Trim(SqlReader.Item(15))  ' RepMobile
+                lView(9) = Trim(SqlReader.Item(16))  ' RepEmail
+                lView(10) = Trim(SqlReader.Item(8))  ' Rep 2
+                lView(11) = Trim(SqlReader.Item(10))  ' Name 2
+                lView(12) = Trim(SqlReader.Item(17))  ' RepMobile 2
+                lView(13) = Trim(SqlReader.Item(18))  ' RepEmail 2
+                lView(14) = Trim(SqlReader.Item(0))  ' OrdUniq 2
+                lView(15) = Trim(SqlReader.Item(19))  ' Status 2
 
                 sItm = New ListViewItem(lView)
                 ListView1.Items.Add(sItm)
                 ListView1.Items(lRow).UseItemStyleForSubItems = False
-                If Trim(SqlReader.Item(13)) <> "" And Microsoft.VisualBasic.Left(CStr(Trim(SqlReader.Item(13))), 2) = "04" Then
-                    sItm.Checked = True
-                Else
+
+
+                'If MOB <> "" And MOB
+
+
+                If VerifyMob(Trim(SqlReader.Item(15))) = False Then
                     sItm.Checked = False
                     ListView1.Items(lRow).SubItems(8).BackColor = Color.LightPink
-                    iErr += 1
+                Else
+                    sItm.Checked = True
                 End If
-                If Trim(SqlReader.Item(15)) = "" And Trim(SqlReader.Item(13)) <> "" And Microsoft.VisualBasic.Left(CStr(Trim(SqlReader.Item(13))), 2) = "04" Then
+                If VerifyMob(Trim(SqlReader.Item(17))) = False Then
+                    If VerifyMob(Trim(SqlReader.Item(15))) = True Then
+                        sItm.Checked = False
+                        ListView1.Items(lRow).SubItems(12).BackColor = Color.LightPink
+                    Else
+                        sItm.Checked = True
+                    End If
+                Else
+                    sItm.Checked = True
+                End If
+
+                ' ------------------------------------------------------------------------------
+                If Trim(SqlReader.Item(19)) = "" Then
                     sItm.Checked = True
                 Else
                     sItm.Checked = False
-                    ListView1.Items(lRow).SubItems(11).BackColor = Color.LightYellow
+                    ListView1.Items(lRow).SubItems(15).BackColor = Color.LightYellow
                 End If
 
                 intCount += 1
@@ -122,17 +144,12 @@ Public Class frmMain
             sSQLCommand.Dispose()
             A4W.Close()
 
-
             ' ================================
             strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Data Grid Refreshed"
             My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
             strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Rows:- " & lRow
             My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
             ' ================================
-
-
-
-
 
         Catch ex As Exception
             ' ================================
@@ -204,11 +221,15 @@ Public Class frmMain
             .Columns.Add("Cust #", 75, HorizontalAlignment.Left)
             .Columns.Add("Name", 250, HorizontalAlignment.Left)
             .Columns.Add("City", 110, HorizontalAlignment.Left)
-            .Columns.Add("Rep", 60, HorizontalAlignment.Left)
-            .Columns.Add("Name", 125, HorizontalAlignment.Left)
-            .Columns.Add("Location", 60, HorizontalAlignment.Left)
-            .Columns.Add("RepMobile", 80, HorizontalAlignment.Left)
-            .Columns.Add("RepEmail", 80, HorizontalAlignment.Left)
+            .Columns.Add("Ship Date", 75, HorizontalAlignment.Left)
+            .Columns.Add("Rep-1", 65, HorizontalAlignment.Left)
+            .Columns.Add("Name-1", 110, HorizontalAlignment.Left)
+            .Columns.Add("RepMobile-1", 80, HorizontalAlignment.Left)
+            .Columns.Add("RepEmail-1", 80, HorizontalAlignment.Left)
+            .Columns.Add("Rep-2", 65, HorizontalAlignment.Left)
+            .Columns.Add("Name-2", 110, HorizontalAlignment.Left)
+            .Columns.Add("RepMobile-2", 80, HorizontalAlignment.Left)
+            .Columns.Add("RepEmail-2", 80, HorizontalAlignment.Left)
             .Columns.Add("ORDUNIQ", 0, HorizontalAlignment.Left)
             .Columns.Add("Status", 190, HorizontalAlignment.Left)
         End With
@@ -229,9 +250,7 @@ Public Class frmMain
             Me.ToolStripStatusLabel2.Text = sSageCompName
             Me.ToolStripStatusLabel3.Text = sSageUserID
             Me.ToolStripStatusLabel4.Text = sSageSessDate
-
-
-            Me.Text = sSageOrgID & " - Order Notifications"
+            Me.Text = sSageOrgID & " - Order Notifications            [ " & BuildVersion & " ]"
         Else
             MsgBox("Sage Connection failed")
             Me.Text = "[ ## Sage Connection Failed ## ]"
@@ -252,18 +271,11 @@ Public Class frmMain
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Sage Connected - Success"
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
 
-
-
         ReadAppConfig()
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Config Read - Success"
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
 
         LoadListview()
-
-
-
-
-
 
     End Sub
 
@@ -275,35 +287,43 @@ Public Class frmMain
 
     Sub ProcessNotifications()
 
-        Dim eBody As String
+        Dim eBody1 As String
+        Dim eBody2 As String
 
         For Each sitm As ListViewItem In Me.ListView1.Items
             Try
 
                 If sitm.Checked = True Then
 
-                    eBody = "<br>Hi " & sitm.SubItems.Item(6).Text & "<br>"
-                    eBody += "<br>Your order " & sitm.SubItems.Item(1).Text & "<br>"
-                    eBody += "for " & sitm.SubItems.Item(3).Text & " of " & sitm.SubItems.Item(4).Text & "<br>"
-                    eBody += "will be shipped on " & Me.dteExpDate.Text & "<br>"
+                    eBody1 = "<br>Hi " & sitm.SubItems.Item(7).Text & "<br>"
+                    eBody1 += "<br>Your order " & sitm.SubItems.Item(1).Text & "<br>"
+                    eBody1 += "for " & sitm.SubItems.Item(3).Text & " of " & sitm.SubItems.Item(4).Text & "<br>"
+                    eBody1 += "will be shipped on " & Me.dteExpDate.Text & "<br>"
 
-                    If SendEmail(sitm.SubItems.Item(8).Text, sitm.SubItems.Item(1).Text, eBody, "from", "mob") = True Then
+                    eBody2 = "<br>Hi " & sitm.SubItems.Item(11).Text & "<br>"
+                    eBody2 += "<br>Your order " & sitm.SubItems.Item(1).Text & "<br>"
+                    eBody2 += "for " & sitm.SubItems.Item(3).Text & " of " & sitm.SubItems.Item(4).Text & "<br>"
+                    eBody2 += "will be shipped on " & Me.dteExpDate.Text & "<br>"
 
 
-                        Call UpdateOENotified(System.DateTime.Now, sSageUserID, sitm.SubItems.Item(10).Text)
-                        sitm.SubItems.Item(11).Text = "SMS sent " & System.DateTime.Now & " - " & sSageUserID
+                    If SendEmail(sitm.SubItems.Item(8).Text, sitm.SubItems.Item(1).Text, eBody1, eBody2, "mob", sitm.SubItems.Item(8).Text, sitm.SubItems.Item(12).Text) = True Then
+
+                        Call UpdateOENotified(System.DateTime.Now, sSageUserID, sitm.SubItems.Item(14).Text)
+                        sitm.SubItems.Item(15).Text = "SMS sent " & System.DateTime.Now & " - " & sSageUserID
 
                         sitm.Checked = False
                         sitm.SubItems.Item(0).BackColor = Color.LightGreen
 
-                        ' ================================
                         If Me.chkRunTest.Checked Then
                             strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "TEST - Notification sent - " & Me.txtTestMobile.Text & " / " & sitm.SubItems.Item(1).Text
                             My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
                         Else
-                            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification sent - " & sitm.SubItems.Item(8).Text & " / " & sitm.SubItems.Item(1).Text
+                            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification sent - " & sitm.SubItems.Item(6).Text & " / " & sitm.SubItems.Item(8).Text & " / " & sitm.SubItems.Item(1).Text
                             My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                            ' ================================
+                            If sitm.SubItems.Item(10).Text <> "" Then
+                                strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification sent - " & sitm.SubItems.Item(10).Text & " / " & sitm.SubItems.Item(12).Text & " / " & sitm.SubItems.Item(1).Text
+                                My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
+                            End If
                         End If
 
                     End If
@@ -359,18 +379,42 @@ Public Class frmMain
             sSQLCommand = New SqlCommand(sSQl, A4W)
             sSQLCommand.ExecuteNonQuery()
             UpdateOENotified = True
+            ' ================================
+            '            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Order " & sOrdUniq & " FOB Updated "
+            '           My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
 
             '            sSQLCommand.Dispose()
             A4W.Close()
         Catch ex As Exception
-            MsgBox("SQL data - Cannot open connection")
+            MsgBox("SQL data - Cannot update OrdUniq " & sOrdUniq)
+            ' ================================
+            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "SQL data - Cannot update OrdUniq FOB" & sOrdUniq
+            My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
         End Try
 
 
 
     End Function
 
+    Function VerifyMob(sMob1 As String) As Integer
 
+        Dim vMob As Boolean = False
+
+        If Trim(sMob1) <> "" Then
+            If (Microsoft.VisualBasic.Left(CStr(sMob1), 2) = "04") And (Len(sMob1.Replace(" ", String.Empty)) = 10) Then
+                vMob = True
+
+            Else
+                vMob = False
+            End If
+        Else
+            vMob = False
+        End If
+
+        VerifyMob = vMob
+        Return VerifyMob
+
+    End Function
 
 
 End Class
