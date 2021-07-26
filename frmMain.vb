@@ -337,7 +337,6 @@ Public Class frmMain
                 Else
                     strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification FAILED - " & sitm.SubItems.Item(8).Text & " / " & sitm.SubItems.Item(1).Text
                     My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-
                 End If
             End Try
 
@@ -346,10 +345,13 @@ Public Class frmMain
     End Sub
 
     Private Sub btnProcess_Click(sender As Object, e As EventArgs) Handles btnProcess.Click
+
         ProcessNotifications()
+
     End Sub
 
     Private Sub chkRunTest_CheckedChanged(sender As Object, e As EventArgs) Handles chkRunTest.CheckedChanged
+
         If Me.chkRunTest.Checked = True Then
             Me.txtTestMobile.Visible = True
             Me.Label4.Visible = True
@@ -357,9 +359,11 @@ Public Class frmMain
             Me.txtTestMobile.Visible = False
             Me.Label4.Visible = False
         End If
+
     End Sub
 
     Function UpdateOENotified(sDateTime As String, sUser As String, sOrdUniq As String) As Boolean
+
         UpdateOENotified = False
         Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
         Dim A4W As New SqlConnection()
@@ -403,7 +407,6 @@ Public Class frmMain
         If Trim(sMob1) <> "" Then
             If (Microsoft.VisualBasic.Left(CStr(sMob1), 2) = "04") And (Len(sMob1.Replace(" ", String.Empty)) = 10) Then
                 vMob = True
-
             Else
                 vMob = False
             End If

@@ -24,7 +24,7 @@ Module Email
         Dim sSubject As String = "Shipment Notice:  " & eSubject
         Dim sToMob As String = eToMob1 & "@e2s.messagemedia.com"
 
-        sToMob = "0404644548@e2s.messagemedia.com"
+        'sToMob = "0404644548@e2s.messagemedia.com"
 
 
 
@@ -61,7 +61,7 @@ Module Email
 
             sToMob = eToMob2 & "@e2s.messagemedia.com"
 
-            sToMob = "0404644548@e2s.messagemedia.com"
+            '            sToMob = "0404644548@e2s.messagemedia.com"
             Try
                 e_mail = New MailMessage()
                 e_mail.From = New MailAddress(frmMain.smtpUser)
