@@ -7,6 +7,9 @@ Imports System.Windows.Forms
 
 Imports Microsoft.Data.SqlClient
 
+Imports SpreadsheetLight
+
+
 Imports System.Xml
 Imports System.IO
 
@@ -22,14 +25,14 @@ Public Class frmMain
     Public sqlDB As String
     Public sqlUser As String
     Public sqlPswd As String
-    Public BuildVersion As String = "20210726.1105"
+    Public BuildVersion As String = "20210728.1130"
     Public smtpHost As String
     Public smtpPort As String
     Public smtpSSL As String
     Public smtpUser As String
     Public smtpPswd As String
 
-    Public LogFile As String = Application.StartupPath & "EmailAlert - " & Format(Now, "yyyyMMdd") & ".txt"
+    Public LogFile As String = System.Windows.Forms.Application.StartupPath & "EmailAlert - " & Format(Now, "yyyyMMdd") & ".txt"
     Public strLogLine As String = ""
 
 
@@ -191,7 +194,7 @@ Public Class frmMain
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
         ' ================================
 
-        Application.Exit()
+        System.Windows.Forms.Application.Exit()
 
     End Sub
 
@@ -201,8 +204,8 @@ Public Class frmMain
         Dim SQLnode As XmlNodeList
         Dim SMTPnode As XmlNodeList
         Dim i As Integer
-        Dim fs As New FileStream(Application.StartupPath & "\EmailAlert.xml", FileMode.Open, FileAccess.Read)
-        xmlDoc.Load(fs)
+        Dim fs As New FileStream(System.Windows.Forms.Application.StartupPath & "\EmailAlert.xml", FileMode.Open, FileAccess.Read)
+        xmldoc.Load(fs)
         SQLnode = xmlDoc.GetElementsByTagName("SQLConfig")
         For i = 0 To SQLnode.Count - 1
             SQLnode(i).ChildNodes.Item(0).InnerText.Trim()
@@ -441,4 +444,44 @@ Public Class frmMain
     End Function
 
 
+    Public Sub ExportXLS()
+
+        Try
+
+
+
+            Dim SL As New SLDocument()
+
+
+
+
+
+
+
+
+            For i = 0 To Me.ListView1.Columns.Count - 1
+                SL.SetCellValue(1, i + 1, Me.ListView1.Columns(i).Text)
+
+            Next
+            For i = 0 To Me.ListView1.Items.Count - 1
+                For j = 0 To Me.ListView1.Items(i).SubItems.Count - 1
+                    SL.SetCellValue(i + 2, j + 1, Me.ListView1.Items(i).SubItems(j).Text)
+                Next
+            Next
+
+            SL.SaveAs("e:\test.xlsx")
+            SL.
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+
+
+
+
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
+        ExportXLS()
+    End Sub
 End Class
