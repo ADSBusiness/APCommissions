@@ -65,8 +65,19 @@ Public Class frmMain
 
         Dim Sdte As String = Me.dteExpDate.Value.ToString("yyyyMMdd")
 
-        sSQl = "select * from v_SMSAlert where EXPDATE='" & Sdte & "' order by EXPDATE"
-        'sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
+
+        If Me.chkShowAllOrders.Checked = True And Me.chkClosedOrders.Checked = True Then
+            sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "'  order by EXPDATE"
+        Else
+            If Me.chkShowAllOrders.Checked = True And Me.chkClosedOrders.Checked = False Then
+                sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
+            Else
+                sSQl = "select * from v_SMSAlert where EXPDATE='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
+
+            End If
+        End If
+
+
         ' ================================
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & sSQl
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
@@ -132,6 +143,16 @@ Public Class frmMain
                     sItm.Checked = False
                     ListView1.Items(lRow).SubItems(15).BackColor = Color.LightYellow
                 End If
+
+                If Trim(SqlReader.Item(2)) < 4 Then
+                    sItm.Checked = True
+                Else
+                    sItm.Checked = False
+                    ListView1.Items(lRow).SubItems(1).BackColor = Color.LightPink
+                End If
+
+
+
 
                 intCount += 1
                 lRow += 1
@@ -217,19 +238,19 @@ Public Class frmMain
 
         With ListView1
             .Columns.Add("#", 45, HorizontalAlignment.Center)
-            .Columns.Add("Order #", 75, HorizontalAlignment.Left)
+            .Columns.Add("Order #", 62, HorizontalAlignment.Left)
             .Columns.Add("Cust #", 75, HorizontalAlignment.Left)
-            .Columns.Add("Name", 250, HorizontalAlignment.Left)
+            .Columns.Add("Name", 240, HorizontalAlignment.Left)
             .Columns.Add("City", 110, HorizontalAlignment.Left)
             .Columns.Add("Ship Date", 75, HorizontalAlignment.Left)
             .Columns.Add("Rep-1", 65, HorizontalAlignment.Left)
             .Columns.Add("Name-1", 110, HorizontalAlignment.Left)
             .Columns.Add("RepMobile-1", 80, HorizontalAlignment.Left)
-            .Columns.Add("RepEmail-1", 80, HorizontalAlignment.Left)
+            .Columns.Add("RepEmail-1", 0, HorizontalAlignment.Left)
             .Columns.Add("Rep-2", 65, HorizontalAlignment.Left)
             .Columns.Add("Name-2", 110, HorizontalAlignment.Left)
             .Columns.Add("RepMobile-2", 80, HorizontalAlignment.Left)
-            .Columns.Add("RepEmail-2", 80, HorizontalAlignment.Left)
+            .Columns.Add("RepEmail-2", 0, HorizontalAlignment.Left)
             .Columns.Add("ORDUNIQ", 0, HorizontalAlignment.Left)
             .Columns.Add("Status", 190, HorizontalAlignment.Left)
         End With

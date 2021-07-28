@@ -42,12 +42,14 @@ Partial Class frmMain
         Me.txtTestMobile = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.chkShowAllOrders = New System.Windows.Forms.CheckBox()
+        Me.chkClosedOrders = New System.Windows.Forms.CheckBox()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnExit
         '
-        Me.btnExit.Location = New System.Drawing.Point(857, 412)
+        Me.btnExit.Location = New System.Drawing.Point(857, 469)
         Me.btnExit.Name = "btnExit"
         Me.btnExit.Size = New System.Drawing.Size(203, 30)
         Me.btnExit.TabIndex = 0
@@ -56,7 +58,7 @@ Partial Class frmMain
         '
         'btnProcess
         '
-        Me.btnProcess.Location = New System.Drawing.Point(140, 412)
+        Me.btnProcess.Location = New System.Drawing.Point(140, 469)
         Me.btnProcess.Name = "btnProcess"
         Me.btnProcess.Size = New System.Drawing.Size(203, 30)
         Me.btnProcess.TabIndex = 1
@@ -66,16 +68,16 @@ Partial Class frmMain
         'ListView1
         '
         Me.ListView1.HideSelection = False
-        Me.ListView1.Location = New System.Drawing.Point(32, 127)
+        Me.ListView1.Location = New System.Drawing.Point(12, 126)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1180, 247)
+        Me.ListView1.Size = New System.Drawing.Size(1261, 324)
         Me.ListView1.TabIndex = 7
         Me.ListView1.UseCompatibleStateImageBehavior = False
         Me.ListView1.View = System.Windows.Forms.View.List
         '
         'btnRefresh
         '
-        Me.btnRefresh.Location = New System.Drawing.Point(329, 47)
+        Me.btnRefresh.Location = New System.Drawing.Point(474, 47)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(198, 43)
         Me.btnRefresh.TabIndex = 8
@@ -141,9 +143,9 @@ Partial Class frmMain
         '
         Me.StatusStrip1.AutoSize = False
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1, Me.ToolStripStatusLabel2, Me.ToolStripStatusLabel3, Me.ToolStripStatusLabel4})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 489)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 532)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(1240, 22)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1285, 22)
         Me.StatusStrip1.TabIndex = 24
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -177,7 +179,7 @@ Partial Class frmMain
         'chkRunTest
         '
         Me.chkRunTest.AutoSize = True
-        Me.chkRunTest.Location = New System.Drawing.Point(511, 416)
+        Me.chkRunTest.Location = New System.Drawing.Point(511, 473)
         Me.chkRunTest.Name = "chkRunTest"
         Me.chkRunTest.Size = New System.Drawing.Size(95, 19)
         Me.chkRunTest.TabIndex = 25
@@ -186,7 +188,7 @@ Partial Class frmMain
         '
         'txtTestMobile
         '
-        Me.txtTestMobile.Location = New System.Drawing.Point(705, 412)
+        Me.txtTestMobile.Location = New System.Drawing.Point(705, 469)
         Me.txtTestMobile.Name = "txtTestMobile"
         Me.txtTestMobile.Size = New System.Drawing.Size(121, 23)
         Me.txtTestMobile.TabIndex = 26
@@ -194,7 +196,7 @@ Partial Class frmMain
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(632, 417)
+        Me.Label4.Location = New System.Drawing.Point(632, 474)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(67, 15)
         Me.Label4.TabIndex = 27
@@ -203,18 +205,40 @@ Partial Class frmMain
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(860, 460)
+        Me.Label7.Location = New System.Drawing.Point(857, 502)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(200, 15)
         Me.Label7.TabIndex = 28
         Me.Label7.Text = "©2021 ADS Business Services Pty Ltd"
+        '
+        'chkShowAllOrders
+        '
+        Me.chkShowAllOrders.AutoSize = True
+        Me.chkShowAllOrders.Location = New System.Drawing.Point(191, 76)
+        Me.chkShowAllOrders.Name = "chkShowAllOrders"
+        Me.chkShowAllOrders.Size = New System.Drawing.Size(181, 19)
+        Me.chkShowAllOrders.TabIndex = 29
+        Me.chkShowAllOrders.Text = "Show all orders after this date"
+        Me.chkShowAllOrders.UseVisualStyleBackColor = True
+        '
+        'chkClosedOrders
+        '
+        Me.chkClosedOrders.AutoSize = True
+        Me.chkClosedOrders.Location = New System.Drawing.Point(191, 101)
+        Me.chkClosedOrders.Name = "chkClosedOrders"
+        Me.chkClosedOrders.Size = New System.Drawing.Size(138, 19)
+        Me.chkClosedOrders.TabIndex = 30
+        Me.chkClosedOrders.Text = "Include closed orders"
+        Me.chkClosedOrders.UseVisualStyleBackColor = True
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(1240, 511)
+        Me.ClientSize = New System.Drawing.Size(1285, 554)
+        Me.Controls.Add(Me.chkClosedOrders)
+        Me.Controls.Add(Me.chkShowAllOrders)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.txtTestMobile)
@@ -261,4 +285,6 @@ Partial Class frmMain
     Friend WithEvents txtTestMobile As TextBox
     Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
+    Friend WithEvents chkShowAllOrders As CheckBox
+    Friend WithEvents chkClosedOrders As CheckBox
 End Class
