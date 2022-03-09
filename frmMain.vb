@@ -75,22 +75,12 @@ Public Class frmMain
         Dim intCount As Decimal = 1
         Dim lRow As Integer = 0
         Dim iErr As Integer = 0
-        Dim lView(16) As String
+        Dim lView(21) As String
         Dim sItm As ListViewItem
 
         Dim Sdte As String = Me.dteExpDate.Value.ToString("yyyyMMdd")
 
-
-        If Me.chkShowAllOrders.Checked = True And Me.chkClosedOrders.Checked = True Then
-            sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "'  order by EXPDATE"
-        Else
-            If Me.chkShowAllOrders.Checked = True And Me.chkClosedOrders.Checked = False Then
-                sSQl = "select * from v_SMSAlert where EXPDATE>='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
-            Else
-                sSQl = "select * from v_SMSAlert where EXPDATE='" & Sdte & "' and COMPLETE <4 order by EXPDATE"
-
-            End If
-        End If
+        sSQl = "Select * from v_APComm order by SPCode, OrderNo, InvDate, DUMMY3 "
 
 
         ' ================================
@@ -98,6 +88,7 @@ Public Class frmMain
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
         ' ================================
         A4W = New SqlConnection(SQLConStr)
+
         Try
             A4W.Open()
             ' ================================
@@ -111,61 +102,57 @@ Public Class frmMain
 
                 lView(0) = intCount
                 lView(1) = Trim(SqlReader.Item(1))  ' Order #
-                lView(2) = Trim(SqlReader.Item(3))  ' Cust #
-                lView(3) = Trim(SqlReader.Item(4))  ' Name
-                lView(4) = Trim(SqlReader.Item(5))  ' City
-                lView(5) = Trim(SqlReader.Item(20))  ' Location
+                lView(2) = Trim(SqlReader.Item(2))  ' Cust #
+                lView(3) = Trim(SqlReader.Item(3))  ' Name
+                lView(4) = Trim(SqlReader.Item(4))  ' City
+                lView(5) = Trim(SqlReader.Item(6))  ' Location
                 lView(6) = Trim(SqlReader.Item(7))  ' Rep
-                lView(7) = Trim(SqlReader.Item(9))  ' Name
-                lView(8) = Trim(SqlReader.Item(15))  ' RepMobile
-                lView(9) = Trim(SqlReader.Item(16))  ' RepEmail
-                lView(10) = Trim(SqlReader.Item(8))  ' Rep 2
-                lView(11) = Trim(SqlReader.Item(10))  ' Name 2
-                lView(12) = Trim(SqlReader.Item(17))  ' RepMobile 2
-                lView(13) = Trim(SqlReader.Item(18))  ' RepEmail 2
-                lView(14) = Trim(SqlReader.Item(0))  ' OrdUniq 2
+                lView(7) = Trim(SqlReader.Item(10))  ' Name
+                lView(8) = Trim(SqlReader.Item(11))  ' RepMobile
+                lView(9) = Trim(SqlReader.Item(13))  ' RepEmail
+                lView(10) = Trim(SqlReader.Item(14))  ' Rep 2
+                lView(11) = Trim(SqlReader.Item(15))  ' Name 2
+                lView(12) = Trim(SqlReader.Item(16))  ' RepMobile 2
+                lView(13) = Trim(SqlReader.Item(17))  ' RepEmail 2
+                lView(14) = Trim(SqlReader.Item(18))  ' OrdUniq 2
                 lView(15) = Trim(SqlReader.Item(19))  ' Status 2
+                lView(16) = Trim(SqlReader.Item(22))  ' Status 2
+                lView(17) = Trim(SqlReader.Item(23))  ' Status 2
+                lView(18) = Trim(SqlReader.Item(24))  ' Status 2
+                lView(19) = Trim(SqlReader.Item(25))  ' Status 2
+                lView(20) = Trim(SqlReader.Item(26))  ' Status 2
+                lView(21) = Trim(SqlReader.Item(26))  ' Status 2
+
+
+                '   .Columns.Add("#", 45, HorizontalAlignment.Center)
+                '   .Columns.Add("SPCode", 62, HorizontalAlignment.Left)
+                '   .Columns.Add("SPName", 75, HorizontalAlignment.Left)
+                '   .Columns.Add("IDCUST", 240, HorizontalAlignment.Left)
+                '   .Columns.Add("NameCust", 110, HorizontalAlignment.Left)
+                '   .Columns.Add("OrdDate", 75, HorizontalAlignment.Left)
+                '   .Columns.Add("OrdNumber", 65, HorizontalAlignment.Left)
+                '   .Columns.Add("FmtItemNo", 110, HorizontalAlignment.Left)
+                '   .Columns.Add("InvNumber", 80, HorizontalAlignment.Left)
+                '   .Columns.Add("InvDate", 0, HorizontalAlignment.Left)
+                '   .Columns.Add("Sales", 65, HorizontalAlignment.Left)
+                '   .Columns.Add("Cost", 110, HorizontalAlignment.Left)
+                '   .Columns.Add("Margin", 80, HorizontalAlignment.Left)
+                '   .Columns.Add("InvcBase", 0, HorizontalAlignment.Left)
+                '   .Columns.Add("LeadType", 0, HorizontalAlignment.Left)
+                '   .Columns.Add("LeadSource", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("TotRecComm", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("SP%", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("SComValue", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("SPGrpID", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("Comm", 190, HorizontalAlignment.Left)
+                '   .Columns.Add("MComm", 190, HorizontalAlignment.Left)
+
+
+
 
                 sItm = New ListViewItem(lView)
                 ListView1.Items.Add(sItm)
                 ListView1.Items(lRow).UseItemStyleForSubItems = False
-
-
-                'If MOB <> "" And MOB
-
-
-                If VerifyMob(Trim(SqlReader.Item(15))) = False Then
-                    sItm.Checked = False
-                    ListView1.Items(lRow).SubItems(8).BackColor = Color.LightPink
-                Else
-                    sItm.Checked = True
-                End If
-                If VerifyMob(Trim(SqlReader.Item(17))) = False Then
-                    If VerifyMob(Trim(SqlReader.Item(15))) = True Then
-                        sItm.Checked = False
-                        ListView1.Items(lRow).SubItems(12).BackColor = Color.LightPink
-                    Else
-                        sItm.Checked = True
-                    End If
-                Else
-                    sItm.Checked = True
-                End If
-
-                ' ------------------------------------------------------------------------------
-                If Trim(SqlReader.Item(19)) = "" Then
-                    sItm.Checked = True
-                Else
-                    sItm.Checked = False
-                    ListView1.Items(lRow).SubItems(15).BackColor = Color.LightYellow
-                End If
-
-                If Trim(SqlReader.Item(2)) < 4 Then
-                    sItm.Checked = True
-                Else
-                    sItm.Checked = False
-                    ListView1.Items(lRow).SubItems(1).BackColor = Color.LightPink
-                End If
-
 
 
 
