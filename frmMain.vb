@@ -25,21 +25,33 @@ Public Class frmMain
     Public sqlDB As String
     Public sqlUser As String
     Public sqlPswd As String
-    Public BuildVersion As String = "20210728.1130"
     Public smtpHost As String
     Public smtpPort As String
     Public smtpSSL As String
     Public smtpUser As String
     Public smtpPswd As String
 
-    Public LogFile As String = System.Windows.Forms.Application.StartupPath & "EmailAlert - " & Format(Now, "yyyyMMdd") & ".txt"
+    Public LogFile As String = System.Windows.Forms.Application.StartupPath & "APComm - " & Format(Now, "yyyyMMdd") & ".txt"
     Public strLogLine As String = ""
 
 
     Public bDebug As Boolean = False
 
+    '20220309.1930    ADS      28/07/2021      Initial Release Of APCommissions
+    '20220309.1930    ADS      28/07/2021      Initial Release Of APCommissions
+    '                                          and here
+    '                                          and here again
+    Public BuildVersion As String = "20220309.1930"
+
+
 
     Sub LoadGrid()
+
+        ' Connect to SQL
+        ' Prompt for paramters
+        ' Load grid with sales data
+
+
 
 
 
@@ -186,7 +198,7 @@ Public Class frmMain
     End Sub
 
 
-    Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
+    Private Sub tnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
         ' ================================
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Application Closed normally"
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
@@ -204,7 +216,7 @@ Public Class frmMain
         Dim SQLnode As XmlNodeList
         Dim SMTPnode As XmlNodeList
         Dim i As Integer
-        Dim fs As New FileStream(System.Windows.Forms.Application.StartupPath & "\EmailAlert.xml", FileMode.Open, FileAccess.Read)
+        Dim fs As New FileStream(System.Windows.Forms.Application.StartupPath & "\APComm.xml", FileMode.Open, FileAccess.Read)
         xmldoc.Load(fs)
         SQLnode = xmlDoc.GetElementsByTagName("SQLConfig")
         For i = 0 To SQLnode.Count - 1
@@ -241,21 +253,33 @@ Public Class frmMain
 
         With ListView1
             .Columns.Add("#", 45, HorizontalAlignment.Center)
-            .Columns.Add("Order #", 62, HorizontalAlignment.Left)
-            .Columns.Add("Cust #", 75, HorizontalAlignment.Left)
-            .Columns.Add("Name", 240, HorizontalAlignment.Left)
-            .Columns.Add("City", 110, HorizontalAlignment.Left)
-            .Columns.Add("Ship Date", 75, HorizontalAlignment.Left)
-            .Columns.Add("Rep-1", 65, HorizontalAlignment.Left)
-            .Columns.Add("Name-1", 110, HorizontalAlignment.Left)
-            .Columns.Add("RepMobile-1", 80, HorizontalAlignment.Left)
-            .Columns.Add("RepEmail-1", 0, HorizontalAlignment.Left)
-            .Columns.Add("Rep-2", 65, HorizontalAlignment.Left)
-            .Columns.Add("Name-2", 110, HorizontalAlignment.Left)
-            .Columns.Add("RepMobile-2", 80, HorizontalAlignment.Left)
-            .Columns.Add("RepEmail-2", 0, HorizontalAlignment.Left)
-            .Columns.Add("ORDUNIQ", 0, HorizontalAlignment.Left)
-            .Columns.Add("Status", 190, HorizontalAlignment.Left)
+            .Columns.Add("SPCode", 62, HorizontalAlignment.Left)
+            .Columns.Add("SPName", 75, HorizontalAlignment.Left)
+            .Columns.Add("IDCUST", 240, HorizontalAlignment.Left)
+            .Columns.Add("NameCust", 110, HorizontalAlignment.Left)
+            .Columns.Add("OrdDate", 75, HorizontalAlignment.Left)
+            .Columns.Add("OrdNumber", 65, HorizontalAlignment.Left)
+            .Columns.Add("FmtItemNo", 110, HorizontalAlignment.Left)
+            .Columns.Add("InvNumber", 80, HorizontalAlignment.Left)
+            .Columns.Add("InvDate", 0, HorizontalAlignment.Left)
+            .Columns.Add("Sales", 65, HorizontalAlignment.Left)
+            .Columns.Add("Cost", 110, HorizontalAlignment.Left)
+            .Columns.Add("Margin", 80, HorizontalAlignment.Left)
+            .Columns.Add("InvcBase", 0, HorizontalAlignment.Left)
+            .Columns.Add("LeadType", 0, HorizontalAlignment.Left)
+            .Columns.Add("LeadSource", 190, HorizontalAlignment.Left)
+            .Columns.Add("TotRecComm", 190, HorizontalAlignment.Left)
+            .Columns.Add("SP%", 190, HorizontalAlignment.Left)
+            .Columns.Add("SComValue", 190, HorizontalAlignment.Left)
+            .Columns.Add("SPGrpID", 190, HorizontalAlignment.Left)
+            .Columns.Add("Comm", 190, HorizontalAlignment.Left)
+            .Columns.Add("MComm", 190, HorizontalAlignment.Left)
+
+
+
+
+
+
         End With
 
         If ListView1.Items.Count > 0 Then
@@ -274,7 +298,7 @@ Public Class frmMain
             Me.ToolStripStatusLabel2.Text = sSageCompName
             Me.ToolStripStatusLabel3.Text = sSageUserID
             Me.ToolStripStatusLabel4.Text = sSageSessDate
-            Me.Text = sSageOrgID & " - Order Notifications            [ " & BuildVersion & " ]"
+            Me.Text = sSageOrgID & " - AP Commissions Processing            [ " & BuildVersion & " ]"
         Else
             MsgBox("Sage Connection failed")
             Me.Text = "[ ## Sage Connection Failed ## ]"
@@ -473,7 +497,7 @@ Public Class frmMain
 
 
             SL.SaveAs("e:\test.xlsx")
-            SL.
+            'SL.
 
         Catch ex As Exception
             MsgBox(ex.Message)
@@ -487,4 +511,15 @@ Public Class frmMain
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         ExportXLS()
     End Sub
+
+    Private Sub test1()
+        Dim ssSQL As String
+
+        ssSQL = <SQL>
+
+                </SQL>
+    End Sub
+
+
+
 End Class
