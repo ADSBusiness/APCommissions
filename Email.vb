@@ -16,10 +16,10 @@ Module Email
         eToMob1 = eToMob1.Replace(" ", String.Empty)
         eToMob2 = eToMob2.Replace(" ", String.Empty)
 
-        If frmMain.chkRunTest.Checked = True Then
-            eToMob1 = frmMain.txtTestMobile.Text
-            eToMob1 = eToMob1.Replace(" ", String.Empty)
-        End If
+        'If frmMain.chkRunTest.Checked = True Then
+        '    eToMob1 = frmMain.txtTestMobile.Text
+        '    eToMob1 = eToMob1.Replace(" ", String.Empty)
+        'End If
 
         Dim sSubject As String = "Shipment Notice:  " & eSubject
         Dim sToMob As String = eToMob1 & "@e2s.messagemedia.com"

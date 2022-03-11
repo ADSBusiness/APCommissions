@@ -37,21 +37,18 @@ Public Class frmMain
 
     Public bDebug As Boolean = False
 
-    '20220309.1930    ADS      28/07/2021      Initial Release Of APCommissions
-    '20220309.1930    ADS      28/07/2021      Initial Release Of APCommissions
-    '                                          and here
-    '                                          and here again
-    Public BuildVersion As String = "20220309.1930"
+    '20220309.1930    ADS      09/03/2022       Initial Release Of APCommissions
+    '20220311.1430    ADS      11/03/2022       LoadGrid verify and formatting
+    '                                           Tidy code and objects
+    '                                           Build Sage AP Inv Batch Creation OBject
+    '
+    '
+    '
+    Public BuildVersion As String = "20220311.1430"
 
 
 
     Sub LoadGrid()
-
-        ' Connect to SQL
-        ' Prompt for paramters
-        ' Load grid with sales data
-
-
 
 
 
@@ -60,18 +57,12 @@ Public Class frmMain
         End If
 
         Me.Label5.Text = ""
-        Me.Label6.Text = ""
 
 
-        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
-
-
-        Dim A4W As New SqlConnection()
-        A4W.ConnectionString = SQLConStr
-        '  A4W.Open()
 
         Dim sSQLCommand As SqlCommand
-        Dim sSQl As String
+        Dim vAPComms As SqlCommand
+        Dim sqlAPComms As String
         Dim intCount As Decimal = 1
         Dim lRow As Integer = 0
         Dim iErr As Integer = 0
@@ -80,13 +71,16 @@ Public Class frmMain
 
         Dim Sdte As String = Me.dteExpDate.Value.ToString("yyyyMMdd")
 
-        sSQl = "Select * from v_APComm order by SPCode, OrderNo, InvDate, DUMMY3 "
+        Dim A4W As New SqlConnection()
+        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
+        A4W = New SqlConnection(SQLConStr)
+        A4W.ConnectionString = SQLConStr
 
 
-        ' ================================
-        strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & sSQl
-        My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-        ' ================================
+        '
+        'TODO: add logic to check if view exists else fail   IF EXISTS(select * FROM sys.views where name = '')
+        '
+
         A4W = New SqlConnection(SQLConStr)
 
         Try
@@ -96,65 +90,38 @@ Public Class frmMain
             My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
             ' ================================
 
-            sSQLCommand = New SqlCommand(sSQl, A4W)
-            Dim SqlReader As SqlDataReader = sSQLCommand.ExecuteReader()
-            While SqlReader.Read()
+            sqlAPComms = "Select * from v_APComm order by SPCode, OrderNo, InvDate, DUMMY3 "
+            vAPComms = New SqlCommand(sqlAPComms, A4W)
+
+            Dim Sql_APComms As SqlDataReader = vAPComms.ExecuteReader()
+            While Sql_APComms.Read()
 
                 lView(0) = intCount
-                lView(1) = Trim(SqlReader.Item(1))  ' Order #
-                lView(2) = Trim(SqlReader.Item(2))  ' Cust #
-                lView(3) = Trim(SqlReader.Item(3))  ' Name
-                lView(4) = Trim(SqlReader.Item(4))  ' City
-                lView(5) = Trim(SqlReader.Item(6))  ' Location
-                lView(6) = Trim(SqlReader.Item(7))  ' Rep
-                lView(7) = Trim(SqlReader.Item(10))  ' Name
-                lView(8) = Trim(SqlReader.Item(11))  ' RepMobile
-                lView(9) = Trim(SqlReader.Item(13))  ' RepEmail
-                lView(10) = Trim(SqlReader.Item(14))  ' Rep 2
-                lView(11) = Trim(SqlReader.Item(15))  ' Name 2
-                lView(12) = Trim(SqlReader.Item(16))  ' RepMobile 2
-                lView(13) = Trim(SqlReader.Item(17))  ' RepEmail 2
-                lView(14) = Trim(SqlReader.Item(18))  ' OrdUniq 2
-                lView(15) = Trim(SqlReader.Item(19))  ' Status 2
-                lView(16) = Trim(SqlReader.Item(22))  ' Status 2
-                lView(17) = Trim(SqlReader.Item(23))  ' Status 2
-                lView(18) = Trim(SqlReader.Item(24))  ' Status 2
-                lView(19) = Trim(SqlReader.Item(25))  ' Status 2
-                lView(20) = Trim(SqlReader.Item(26))  ' Status 2
-                lView(21) = Trim(SqlReader.Item(26))  ' Status 2
-
-
-                '   .Columns.Add("#", 45, HorizontalAlignment.Center)
-                '   .Columns.Add("SPCode", 62, HorizontalAlignment.Left)
-                '   .Columns.Add("SPName", 75, HorizontalAlignment.Left)
-                '   .Columns.Add("IDCUST", 240, HorizontalAlignment.Left)
-                '   .Columns.Add("NameCust", 110, HorizontalAlignment.Left)
-                '   .Columns.Add("OrdDate", 75, HorizontalAlignment.Left)
-                '   .Columns.Add("OrdNumber", 65, HorizontalAlignment.Left)
-                '   .Columns.Add("FmtItemNo", 110, HorizontalAlignment.Left)
-                '   .Columns.Add("InvNumber", 80, HorizontalAlignment.Left)
-                '   .Columns.Add("InvDate", 0, HorizontalAlignment.Left)
-                '   .Columns.Add("Sales", 65, HorizontalAlignment.Left)
-                '   .Columns.Add("Cost", 110, HorizontalAlignment.Left)
-                '   .Columns.Add("Margin", 80, HorizontalAlignment.Left)
-                '   .Columns.Add("InvcBase", 0, HorizontalAlignment.Left)
-                '   .Columns.Add("LeadType", 0, HorizontalAlignment.Left)
-                '   .Columns.Add("LeadSource", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("TotRecComm", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("SP%", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("SComValue", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("SPGrpID", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("Comm", 190, HorizontalAlignment.Left)
-                '   .Columns.Add("MComm", 190, HorizontalAlignment.Left)
-
-
-
+                lView(1) = Trim(Sql_APComms.Item(0))    ' SPCode
+                lView(2) = Trim(Sql_APComms.Item(1))    ' SPName
+                lView(3) = Trim(Sql_APComms.Item(2))    ' IDCust
+                lView(4) = Trim(Sql_APComms.Item(3))    ' NameCust
+                lView(5) = Trim(Sql_APComms.Item(5))    ' OrdDate
+                lView(6) = Trim(Sql_APComms.Item(6))    ' OrdNumber
+                lView(7) = Trim(Sql_APComms.Item(9))    ' FmtItemNo
+                lView(8) = Trim(Sql_APComms.Item(10))   ' InvNumber
+                lView(9) = Trim(Sql_APComms.Item(12))   ' InvDate
+                lView(10) = Format(Sql_APComms.Item(13), "##,##0.00")  ' Sales  Format(5459.4, "##,##0.00")
+                lView(11) = Format(Sql_APComms.Item(14), "##,##0.00")  ' Cost
+                lView(12) = Format(Sql_APComms.Item(15), "##,##0.00")  ' Margin
+                lView(13) = Format(Sql_APComms.Item(16), "##,##0.00")  ' InvcBase
+                lView(14) = Trim(Sql_APComms.Item(17))  ' LeadType
+                lView(15) = Trim(Sql_APComms.Item(18))  ' LeadSource
+                lView(16) = Format(Sql_APComms.Item(21), "##,##0.00")  ' TotRecComm
+                lView(17) = Trim(Sql_APComms.Item(22))  ' SP%
+                lView(18) = Format(Sql_APComms.Item(23), "##,##0.00")  ' SCommValue
+                lView(19) = Trim(Sql_APComms.Item(24))  ' SPGrpID
+                lView(20) = Format(Sql_APComms.Item(25), "##,##0.00")  ' Comm
+                lView(21) = Format(Sql_APComms.Item(25), "##,##0.00")  ' MComm
 
                 sItm = New ListViewItem(lView)
                 ListView1.Items.Add(sItm)
                 ListView1.Items(lRow).UseItemStyleForSubItems = False
-
-
 
                 intCount += 1
                 lRow += 1
@@ -162,9 +129,9 @@ Public Class frmMain
 
             End While
             Me.Label5.Text = lRow
-            Me.Label6.Text = iErr
-            SqlReader.Close()
-            sSQLCommand.Dispose()
+
+            Sql_APComms.Close()
+            vAPComms.Dispose()
             A4W.Close()
 
             ' ================================
@@ -240,31 +207,27 @@ Public Class frmMain
 
         With ListView1
             .Columns.Add("#", 45, HorizontalAlignment.Center)
-            .Columns.Add("SPCode", 62, HorizontalAlignment.Left)
-            .Columns.Add("SPName", 75, HorizontalAlignment.Left)
-            .Columns.Add("IDCUST", 240, HorizontalAlignment.Left)
-            .Columns.Add("NameCust", 110, HorizontalAlignment.Left)
+            .Columns.Add("SPCode", 60, HorizontalAlignment.Left)
+            .Columns.Add("SPName", 110, HorizontalAlignment.Left)
+            .Columns.Add("IDCUST", 75, HorizontalAlignment.Left)
+            .Columns.Add("NameCust", 260, HorizontalAlignment.Left)
             .Columns.Add("OrdDate", 75, HorizontalAlignment.Left)
-            .Columns.Add("OrdNumber", 65, HorizontalAlignment.Left)
-            .Columns.Add("FmtItemNo", 110, HorizontalAlignment.Left)
+            .Columns.Add("OrdNumber", 75, HorizontalAlignment.Left)
+            .Columns.Add("FmtItemNo", 120, HorizontalAlignment.Left)
             .Columns.Add("InvNumber", 80, HorizontalAlignment.Left)
-            .Columns.Add("InvDate", 0, HorizontalAlignment.Left)
-            .Columns.Add("Sales", 65, HorizontalAlignment.Left)
-            .Columns.Add("Cost", 110, HorizontalAlignment.Left)
-            .Columns.Add("Margin", 80, HorizontalAlignment.Left)
-            .Columns.Add("InvcBase", 0, HorizontalAlignment.Left)
-            .Columns.Add("LeadType", 0, HorizontalAlignment.Left)
-            .Columns.Add("LeadSource", 190, HorizontalAlignment.Left)
-            .Columns.Add("TotRecComm", 190, HorizontalAlignment.Left)
-            .Columns.Add("SP%", 190, HorizontalAlignment.Left)
-            .Columns.Add("SComValue", 190, HorizontalAlignment.Left)
-            .Columns.Add("SPGrpID", 190, HorizontalAlignment.Left)
-            .Columns.Add("Comm", 190, HorizontalAlignment.Left)
-            .Columns.Add("MComm", 190, HorizontalAlignment.Left)
-
-
-
-
+            .Columns.Add("InvDate", 80, HorizontalAlignment.Left)
+            .Columns.Add("Sales", 80, HorizontalAlignment.Right)
+            .Columns.Add("Cost", 80, HorizontalAlignment.Right)
+            .Columns.Add("Margin", 80, HorizontalAlignment.Right)
+            .Columns.Add("InvcBase", 80, HorizontalAlignment.Right)
+            .Columns.Add("LeadType", 65, HorizontalAlignment.Center)
+            .Columns.Add("LeadSource", 65, HorizontalAlignment.Center)
+            .Columns.Add("TotRecComm", 80, HorizontalAlignment.Right)
+            .Columns.Add("SP%", 40, HorizontalAlignment.Center)
+            .Columns.Add("SComValue", 80, HorizontalAlignment.Right)
+            .Columns.Add("SPGrpID", 65, HorizontalAlignment.Right)
+            .Columns.Add("Comm", 80, HorizontalAlignment.Right)
+            .Columns.Add("MComm", 80, HorizontalAlignment.Right)
 
 
         End With
@@ -274,31 +237,70 @@ Public Class frmMain
         End If
 
         Me.Label5.Text = ""
-        Me.Label6.Text = ""
+        'Me.Label6.Text = ""
+
+
+        '
+        ' TODO: Move sqlARSAP to Form Load
+        ' TODO: Add a condition
+        '
+        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
+        Dim A4W As New SqlConnection()
+        A4W = New SqlConnection(SQLConStr)
+        Try
+            A4W.Open()
+
+            Dim vARSAP As SqlCommand
+            Dim sqlARSAP As String
+
+            sqlARSAP = " select rtrim(CODESLSP) + ' - ' + rtrim(NAMEEMPL) from arsap where SWACTV=1 "
+            vARSAP = New SqlCommand(sqlARSAP, A4W)
+            Dim Sql_ARSAP As SqlDataReader = vARSAP.ExecuteReader()
+            While Sql_ARSAP.Read()
+                cboSalesPerson.Items.Add(Sql_ARSAP.Item(0))
+            End While
+
+            Sql_ARSAP.Close()
+            vARSAP.Dispose()
+            A4W.Close()
+
+        Catch ex As Exception
+
+        End Try
+
+
+
 
     End Sub
 
     Private Sub ConnectToSage()
 
-        If SageSession() = True Then
+        If SageConnect.SageSession() = True Then
             Me.ToolStripStatusLabel1.Text = sSageOrgID
             Me.ToolStripStatusLabel2.Text = sSageCompName
             Me.ToolStripStatusLabel3.Text = sSageUserID
             Me.ToolStripStatusLabel4.Text = sSageSessDate
             Me.Text = sSageOrgID & " - AP Commissions Processing            [ " & BuildVersion & " ]"
+
+            If SageConnect.DeclareViews() = True Then
+
+            End If
         Else
             MsgBox("Sage Connection failed")
             Me.Text = "[ ## Sage Connection Failed ## ]"
         End If
 
 
+
+
     End Sub
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Me.txtTestMobile.Visible = False
-        Me.Label4.Visible = False
+        'Me.txtTestMobile.Visible = False
+        'Me.Label4.Visible = False
 
         ConnectToSage()
+
 
         strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Application Opened - Success"
         My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
@@ -320,193 +322,32 @@ Public Class frmMain
 
     End Sub
 
-    Sub ProcessNotifications()
 
-        Dim eBody1 As String
-        Dim eBody2 As String
-
-        For Each sitm As ListViewItem In Me.ListView1.Items
-            Try
-
-                If sitm.Checked = True Then
-
-                    eBody1 = "<br>Hi " & sitm.SubItems.Item(7).Text & "<br>"
-                    eBody1 += "<br>Your order " & sitm.SubItems.Item(1).Text & "<br>"
-                    eBody1 += "for " & sitm.SubItems.Item(3).Text & " of " & sitm.SubItems.Item(4).Text & "<br>"
-                    eBody1 += "will be shipped on " & Me.dteExpDate.Text & "<br>"
-
-                    eBody2 = "<br>Hi " & sitm.SubItems.Item(11).Text & "<br>"
-                    eBody2 += "<br>Your order " & sitm.SubItems.Item(1).Text & "<br>"
-                    eBody2 += "for " & sitm.SubItems.Item(3).Text & " of " & sitm.SubItems.Item(4).Text & "<br>"
-                    eBody2 += "will be shipped on " & Me.dteExpDate.Text & "<br>"
-
-
-                    If SendEmail(sitm.SubItems.Item(8).Text, sitm.SubItems.Item(1).Text, eBody1, eBody2, "mob", sitm.SubItems.Item(8).Text, sitm.SubItems.Item(12).Text) = True Then
-
-                        Call UpdateOENotified(System.DateTime.Now, sSageUserID, sitm.SubItems.Item(14).Text)
-                        sitm.SubItems.Item(15).Text = "SMS sent " & System.DateTime.Now & " - " & sSageUserID
-
-                        sitm.Checked = False
-                        sitm.SubItems.Item(0).BackColor = Color.LightGreen
-
-                        If Me.chkRunTest.Checked Then
-                            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "TEST - Notification sent - " & Me.txtTestMobile.Text & " / " & sitm.SubItems.Item(1).Text
-                            My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                        Else
-                            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification sent - " & sitm.SubItems.Item(6).Text & " / " & sitm.SubItems.Item(8).Text & " / " & sitm.SubItems.Item(1).Text
-                            My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                            If sitm.SubItems.Item(10).Text <> "" Then
-                                strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification sent - " & sitm.SubItems.Item(10).Text & " / " & sitm.SubItems.Item(12).Text & " / " & sitm.SubItems.Item(1).Text
-                                My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                            End If
-                        End If
-
-                    End If
-
-                End If
-
-            Catch ex As Exception
-                If Me.chkRunTest.Checked Then
-                    strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "TEST - Notification FAILED - " & Me.txtTestMobile.Text & " / " & sitm.SubItems.Item(1).Text
-                    My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                Else
-                    strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Notification FAILED - " & sitm.SubItems.Item(8).Text & " / " & sitm.SubItems.Item(1).Text
-                    My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-                End If
-            End Try
-
-        Next
-
-    End Sub
 
     Private Sub btnProcess_Click(sender As Object, e As EventArgs) Handles btnProcess.Click
 
-        ProcessNotifications()
+        '  ProcessNotifications()
 
     End Sub
 
-    Private Sub chkRunTest_CheckedChanged(sender As Object, e As EventArgs) Handles chkRunTest.CheckedChanged
-
-        If Me.chkRunTest.Checked = True Then
-            Me.txtTestMobile.Visible = True
-            Me.Label4.Visible = True
-        Else
-            Me.txtTestMobile.Visible = False
-            Me.Label4.Visible = False
-        End If
-
-    End Sub
-
-    Function UpdateOENotified(sDateTime As String, sUser As String, sOrdUniq As String) As Boolean
-
-        UpdateOENotified = False
-        Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
-        Dim A4W As New SqlConnection()
-        A4W.ConnectionString = SQLConStr
-
-        Dim sSQLCommand As SqlCommand
-        Dim sSQl As String
-        Dim intCount As Decimal = 1
-        Dim lRow As Integer = 0
-        Dim iErr As Integer = 0
-        Dim lView(10) As String
-
-        sSQl = "update oeordh set fob= 'SMS sent " & sDateTime & " - " & sUser & "' where ORDUNIQ='" & sOrdUniq & "'"
-        A4W = New SqlConnection(SQLConStr)
-        Try
-            A4W.Open()
-            sSQLCommand = New SqlCommand(sSQl, A4W)
-            sSQLCommand.ExecuteNonQuery()
-            UpdateOENotified = True
-            ' ================================
-            '            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "Order " & sOrdUniq & " FOB Updated "
-            '           My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-
-            '            sSQLCommand.Dispose()
-            A4W.Close()
-        Catch ex As Exception
-            MsgBox("SQL data - Cannot update OrdUniq " & sOrdUniq)
-            ' ================================
-            strLogLine = System.DateTime.Now & " - " & sSageOrgID & " - " & sSageUserID & "  -  " & "SQL data - Cannot update OrdUniq FOB" & sOrdUniq
-            My.Computer.FileSystem.WriteAllText(LogFile, strLogLine & vbCrLf, True)
-        End Try
 
 
+    Sub CreateSPInvoices()
 
-    End Function
-
-    Function VerifyMob(sMob1 As String) As Integer
-
-        Dim vMob As Boolean = False
-
-        If Trim(sMob1) <> "" Then
-            If (Microsoft.VisualBasic.Left(CStr(sMob1), 2) = "04") And (Len(sMob1.Replace(" ", String.Empty)) = 10) Then
-                vMob = True
-            Else
-                vMob = False
-            End If
-        Else
-            vMob = False
-        End If
-
-        VerifyMob = vMob
-        Return VerifyMob
-
-    End Function
-
-
-    Public Sub ExportXLS()
-
-        Try
-
-
-
-            Dim SL As New SLDocument()
+        '
+        '  Create New AP Inv Batch
+        '   Group daat by SP and sum Commission Due
+        '   Add entry to btch for SP, and add lines for comms/charges
+        '
 
 
 
 
-
-
-
-
-            For i = 0 To Me.ListView1.Columns.Count - 1
-                SL.SetCellValue(1, i + 1, Me.ListView1.Columns(i).Text)
-
-            Next
-            For i = 0 To Me.ListView1.Items.Count - 1
-                For j = 0 To Me.ListView1.Items(i).SubItems.Count - 1
-                    SL.SetCellValue(i + 2, j + 1, Me.ListView1.Items(i).SubItems(j).Text)
-                Next
-            Next
-
-
-
-
-            SL.SaveAs("e:\test.xlsx")
-            'SL.
-
-        Catch ex As Exception
-            MsgBox(ex.Message)
-        End Try
 
 
 
 
     End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        ExportXLS()
-    End Sub
-
-    Private Sub test1()
-        Dim ssSQL As String
-
-        ssSQL = <SQL>
-
-                </SQL>
-    End Sub
-
 
 
 End Class

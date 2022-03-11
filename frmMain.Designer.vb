@@ -29,21 +29,17 @@ Partial Class frmMain
         Me.btnRefresh = New System.Windows.Forms.Button()
         Me.dteExpDate = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel2 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel3 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel4 = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.chkRunTest = New System.Windows.Forms.CheckBox()
-        Me.txtTestMobile = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
-        Me.chkShowAllOrders = New System.Windows.Forms.CheckBox()
-        Me.chkClosedOrders = New System.Windows.Forms.CheckBox()
+        Me.cboSalesPerson = New System.Windows.Forms.ComboBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.ChkShowAllRecords = New System.Windows.Forms.CheckBox()
         Me.StatusStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -77,7 +73,7 @@ Partial Class frmMain
         '
         'btnRefresh
         '
-        Me.btnRefresh.Location = New System.Drawing.Point(474, 47)
+        Me.btnRefresh.Location = New System.Drawing.Point(690, 53)
         Me.btnRefresh.Name = "btnRefresh"
         Me.btnRefresh.Size = New System.Drawing.Size(198, 43)
         Me.btnRefresh.TabIndex = 8
@@ -95,45 +91,26 @@ Partial Class frmMain
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(58, 53)
+        Me.Label1.Location = New System.Drawing.Point(91, 53)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(114, 15)
+        Me.Label1.Size = New System.Drawing.Size(85, 15)
         Me.Label1.TabIndex = 10
-        Me.Label1.Text = "Expected Ship Date :"
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(949, 69)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(41, 15)
-        Me.Label6.TabIndex = 23
-        Me.Label6.Text = "Label6"
+        Me.Label1.Text = "Effective Date :"
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(949, 47)
+        Me.Label5.Location = New System.Drawing.Point(1019, 47)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(41, 15)
         Me.Label5.TabIndex = 22
         Me.Label5.Text = "Label5"
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me.Label3.Location = New System.Drawing.Point(834, 69)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(105, 15)
-        Me.Label3.TabIndex = 21
-        Me.Label3.Text = "Missing Mobile # :"
-        '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Segoe UI", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me.Label2.Location = New System.Drawing.Point(834, 47)
+        Me.Label2.Location = New System.Drawing.Point(925, 47)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(88, 15)
         Me.Label2.TabIndex = 20
@@ -176,32 +153,6 @@ Partial Class frmMain
         Me.ToolStripStatusLabel4.Size = New System.Drawing.Size(123, 17)
         Me.ToolStripStatusLabel4.Text = "ToolStripStatusLabel4"
         '
-        'chkRunTest
-        '
-        Me.chkRunTest.AutoSize = True
-        Me.chkRunTest.Location = New System.Drawing.Point(511, 473)
-        Me.chkRunTest.Name = "chkRunTest"
-        Me.chkRunTest.Size = New System.Drawing.Size(95, 19)
-        Me.chkRunTest.TabIndex = 25
-        Me.chkRunTest.Text = "System Test ?"
-        Me.chkRunTest.UseVisualStyleBackColor = True
-        '
-        'txtTestMobile
-        '
-        Me.txtTestMobile.Location = New System.Drawing.Point(705, 469)
-        Me.txtTestMobile.Name = "txtTestMobile"
-        Me.txtTestMobile.Size = New System.Drawing.Size(121, 23)
-        Me.txtTestMobile.TabIndex = 26
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(632, 474)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(67, 15)
-        Me.Label4.TabIndex = 27
-        Me.Label4.Text = "Test Mobile"
-        '
         'Label7
         '
         Me.Label7.AutoSize = True
@@ -209,27 +160,34 @@ Partial Class frmMain
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(200, 15)
         Me.Label7.TabIndex = 28
-        Me.Label7.Text = "©2021 ADS Business Services Pty Ltd"
+        Me.Label7.Text = "©2022 ADS Business Services Pty Ltd"
         '
-        'chkShowAllOrders
+        'cboSalesPerson
         '
-        Me.chkShowAllOrders.AutoSize = True
-        Me.chkShowAllOrders.Location = New System.Drawing.Point(191, 76)
-        Me.chkShowAllOrders.Name = "chkShowAllOrders"
-        Me.chkShowAllOrders.Size = New System.Drawing.Size(181, 19)
-        Me.chkShowAllOrders.TabIndex = 29
-        Me.chkShowAllOrders.Text = "Show all orders after this date"
-        Me.chkShowAllOrders.UseVisualStyleBackColor = True
+        Me.cboSalesPerson.FormattingEnabled = True
+        Me.cboSalesPerson.Location = New System.Drawing.Point(191, 76)
+        Me.cboSalesPerson.Name = "cboSalesPerson"
+        Me.cboSalesPerson.Size = New System.Drawing.Size(290, 23)
+        Me.cboSalesPerson.TabIndex = 29
         '
-        'chkClosedOrders
+        'Label3
         '
-        Me.chkClosedOrders.AutoSize = True
-        Me.chkClosedOrders.Location = New System.Drawing.Point(191, 101)
-        Me.chkClosedOrders.Name = "chkClosedOrders"
-        Me.chkClosedOrders.Size = New System.Drawing.Size(138, 19)
-        Me.chkClosedOrders.TabIndex = 30
-        Me.chkClosedOrders.Text = "Include closed orders"
-        Me.chkClosedOrders.UseVisualStyleBackColor = True
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(91, 84)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(75, 15)
+        Me.Label3.TabIndex = 30
+        Me.Label3.Text = "Salesperson :"
+        '
+        'ChkShowAllRecords
+        '
+        Me.ChkShowAllRecords.AutoSize = True
+        Me.ChkShowAllRecords.Location = New System.Drawing.Point(520, 79)
+        Me.ChkShowAllRecords.Name = "ChkShowAllRecords"
+        Me.ChkShowAllRecords.Size = New System.Drawing.Size(117, 19)
+        Me.ChkShowAllRecords.TabIndex = 31
+        Me.ChkShowAllRecords.Text = "Show All Records"
+        Me.ChkShowAllRecords.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -237,16 +195,12 @@ Partial Class frmMain
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(1285, 554)
-        Me.Controls.Add(Me.chkClosedOrders)
-        Me.Controls.Add(Me.chkShowAllOrders)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.txtTestMobile)
-        Me.Controls.Add(Me.chkRunTest)
-        Me.Controls.Add(Me.StatusStrip1)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.ChkShowAllRecords)
         Me.Controls.Add(Me.Label3)
+        Me.Controls.Add(Me.cboSalesPerson)
+        Me.Controls.Add(Me.Label7)
+        Me.Controls.Add(Me.StatusStrip1)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.dteExpDate)
@@ -272,19 +226,15 @@ Partial Class frmMain
     Friend WithEvents btnRefresh As Button
     Friend WithEvents dteExpDate As DateTimePicker
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label6 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents StatusStrip1 As StatusStrip
     Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel2 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel3 As ToolStripStatusLabel
     Friend WithEvents ToolStripStatusLabel4 As ToolStripStatusLabel
-    Friend WithEvents chkRunTest As CheckBox
-    Friend WithEvents txtTestMobile As TextBox
-    Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
-    Friend WithEvents chkShowAllOrders As CheckBox
-    Friend WithEvents chkClosedOrders As CheckBox
+    Friend WithEvents cboSalesPerson As ComboBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents ChkShowAllRecords As CheckBox
 End Class
