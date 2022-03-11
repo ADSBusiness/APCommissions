@@ -60,7 +60,6 @@ Public Class frmMain
 
 
 
-        Dim sSQLCommand As SqlCommand
         Dim vAPComms As SqlCommand
         Dim sqlAPComms As String
         Dim intCount As Decimal = 1
@@ -225,7 +224,7 @@ Public Class frmMain
             .Columns.Add("TotRecComm", 80, HorizontalAlignment.Right)
             .Columns.Add("SP%", 40, HorizontalAlignment.Center)
             .Columns.Add("SComValue", 80, HorizontalAlignment.Right)
-            .Columns.Add("SPGrpID", 65, HorizontalAlignment.Right)
+            .Columns.Add("FieldTrainer", 65, HorizontalAlignment.Right)
             .Columns.Add("Comm", 80, HorizontalAlignment.Right)
             .Columns.Add("MComm", 80, HorizontalAlignment.Right)
 
@@ -253,7 +252,7 @@ Public Class frmMain
             Dim vARSAP As SqlCommand
             Dim sqlARSAP As String
 
-            sqlARSAP = " select rtrim(CODESLSP) + ' - ' + rtrim(NAMEEMPL) from arsap where SWACTV=1 "
+            sqlARSAP = " select rtrim(CODESLSP) + '  -  ' + rtrim(NAMEEMPL) from arsap where SWACTV=1 "
             vARSAP = New SqlCommand(sqlARSAP, A4W)
             Dim Sql_ARSAP As SqlDataReader = vARSAP.ExecuteReader()
             While Sql_ARSAP.Read()
