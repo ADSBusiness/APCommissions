@@ -195,4 +195,110 @@ Module SageConnect
 
     End Sub
 
+
+    Public Sub PrintRCTI()
+
+        Try
+            sSession.Errors.Clear()
+
+            Dim rpt As AccpacCOMAPI.AccpacReport = sSession.ReportSelect("APRCTI[APRCTI01.RPT]", " ", " ")
+            Dim rptPrintSetup As AccpacCOMAPI.AccpacPrintSetup = sSession.GetPrintSetupGetPrintSetup("      ", "      ")
+            rpt.NumOfCopies = 1
+            '            rpt.PrintDir = ""
+
+            rpt.SetParam("BTCHNUM", "1380")
+            rpt.Destination = AccpacCOMAPI.tagPrintDestinationEnum.PD_PREVIEW
+
+            rpt.PrintReport()
+
+
+
+        Catch ex As Exception
+            AccpacErrorHandler()
+        End Try
+
+
+
+
+
+
+
+    End Sub
+
+
+    Sub APInvoice()
+
+        '        Do While Cells(RowID, 2) <> ""
+        '        Cells(RowID, 1).Select
+        '
+        ' Add 3 lines of costs
+        ' Lopp through comms and sum
+        ' loop through datagrid and group by vendor
+        '
+
+        Try
+            APINVOICE1batch.Process()
+            APINVOICE1batchFields.FieldByName("CNTBTCH").Value = "2945"
+            '            Temp = APINVOICE1header.Exists
+            APINVOICE1batch.Read()
+
+            APINVOICE1header.RecordCreate(2)
+            APINVOICE1detail1.Cancel()
+            APINVOICE1headerFields.FieldByName("IDVEND").Value = "ADALAW"
+            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("7")
+            APINVOICE1header.Process()
+
+            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("4")
+            APINVOICE1header.Process()
+            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+            APINVOICE1headerFields.FieldByName("DATEINVC").Value = "01/03/2022"
+            APINVOICE1headerFields.FieldByName("IDINVC").Value = "12345a"
+            APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification("PO1")
+            APINVOICE1headerFields.FieldByName("TEXTTRX").Value = "1"  '
+            APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = "1100"
+
+            Temp = APINVOICE1detail1.Exists
+            APINVOICE1detail1.RecordCreate(0)
+            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+            APINVOICE1detail1.Process()
+            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+
+            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
+            APINVOICE1detail1.Insert()
+
+            APINVOICE1detail1.Read()
+
+            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = "1000"
+            APINVOICE1detail1.Update()
+            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+            APINVOICE1detail1.Read()
+            Temp = APINVOICE1detail1.Exists
+            APINVOICE1detail1.RecordCreate(0)
+            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+            APINVOICE1detail1.Process()
+            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+            APINVOICE1detail1.Read()
+            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+            APINVOICE1header.Insert()
+            APINVOICE1batch.Read()
+            Temp = APINVOICE1header.Exists
+            APINVOICE1header.RecordCreate(2)
+            APINVOICE1detail1.Cancel()
+
+
+
+
+        Catch ex As Exception
+            AccpacErrorHandler()
+        End Try
+        'APINVOICE3headerFields("ORDRNBR").PutWithoutVerification ("ORDNUM")
+
+
+
+
+    End Sub
+
+
+
+
 End Module

@@ -58,7 +58,7 @@ Partial Class frmMain
         Me.btnProcess.Name = "btnProcess"
         Me.btnProcess.Size = New System.Drawing.Size(203, 30)
         Me.btnProcess.TabIndex = 1
-        Me.btnProcess.Text = "Process Notifications"
+        Me.btnProcess.Text = "Process AP Invoice Batch"
         Me.btnProcess.UseVisualStyleBackColor = True
         '
         'ListView1
