@@ -41,10 +41,11 @@ Public Class frmMain
     '20220311.1430    ADS      11/03/2022       LoadGrid verify and formatting
     '                                           Tidy code and objects
     '                                           Build Sage AP Inv Batch Creation OBject
+    '20220328.1545    ADS       28/03/2022      Adjust for correct AP INV entry
     '
     '
-    '
-    Public BuildVersion As String = "20220311.1430"
+
+    Public BuildVersion As String = "20220328.1545"
 
 
 
@@ -113,7 +114,7 @@ Public Class frmMain
                 lView(15) = Trim(Sql_APComms.Item(18))  ' LeadSource
                 lView(16) = Format(Sql_APComms.Item(21), "##,##0.00")  ' TotRecComm
                 lView(17) = Trim(Sql_APComms.Item(22))  ' SP%
-                lView(18) = Format(Sql_APComms.Item(23), "##,##0.00")  ' SCommValue
+                lView(18) = Format(Sql_APComms.Item(23) * Sql_APComms.Item(21), "##,##0.00")  ' SCommValue
                 lView(19) = Trim(Sql_APComms.Item(24))  ' SPGrpID
                 lView(20) = Format(Sql_APComms.Item(25), "##,##0.00")  ' Comm
                 lView(21) = Format(Sql_APComms.Item(25), "##,##0.00")  ' MComm
