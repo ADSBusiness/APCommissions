@@ -349,7 +349,7 @@ Module SageConnect
                             bFirstDetail = False
                         End If
 
-                        ' add a line for each ORDNUMBER finance charges
+                        ' add a line for each ORDNUMBER Perf Bonus
 
                         If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
                             sOrdNumb = sitm.SubItems.Item(6).Text
@@ -365,6 +365,71 @@ Module SageConnect
                             ' TODO: Determine SP State and adjust GL Code for perf bonus
                             sSPState = FindSPState(sSPCode)
                             APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "62060-" & Trim(sSPState) & "-3"
+                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb
+
+                            APINVOICE1detail1.Insert()
+                            APINVOICE1detail1.Read()
+
+                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                            dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                            APINVOICE1detail1.Update()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+                            Temp = APINVOICE1detail1.Exists
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+
+                            ' add a line for each ORDNUMBER Finance Charges
+                            Temp = APINVOICE1detail1.Exists
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            ' TODO: Determine SP State and adjust GL Code for perf bonus
+                            'sSPState = FindSPState(sSPCode)
+                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
+                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb
+
+                            APINVOICE1detail1.Insert()
+                            APINVOICE1detail1.Read()
+
+                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                            dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                            APINVOICE1detail1.Update()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+                            Temp = APINVOICE1detail1.Exists
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+
+
+                        End If
+
+
+                        If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
+                            sOrdNumb = sitm.SubItems.Item(6).Text
+                            Temp = APINVOICE1detail1.Exists
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                            APINVOICE1detail1.Read()
+                            APINVOICE1detail1.RecordCreate(0)
+                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                            APINVOICE1detail1.Process()
+                            ' TODO: Determine SP State and adjust GL Code for perf bonus
+                            sSPState = FindSPState(sSPCode)
+                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
                             APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb
 
                             APINVOICE1detail1.Insert()
