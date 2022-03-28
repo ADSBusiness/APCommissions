@@ -126,13 +126,13 @@ Module SageConnect
             APINVOICE1detail4.Compose(APInvBatchDetail4)
 
 
-
+            DeclareViews = True
 
         Catch ex As Exception
 
             AccpacErrorHandler()
 
-            DeclareViews = True
+            DeclareViews = False
 
         End Try
 
@@ -177,6 +177,7 @@ Module SageConnect
 
 
     Public Sub AccpacErrorHandler()
+
         Dim idxError As Integer
         Dim OutString As String
         If sSession.Errors.Count > 0 Then
@@ -235,64 +236,134 @@ Module SageConnect
         ' Lopp through comms and sum
         ' loop through datagrid and group by vendor
         '
-
+        Dim sSPCode As String = ""
+        Dim bFirstLine As Boolean = True
+        Dim dInvAmt As Double = 0
+        Dim rRow As Integer
+        Dim tempp As String
+        rRow = 1
         Try
-            APINVOICE1batch.Process()
-            APINVOICE1batchFields.FieldByName("CNTBTCH").Value = "2945"
-            '            Temp = APINVOICE1header.Exists
-            APINVOICE1batch.Read()
+            Dim AP_InvBatch As String = Sage_AP_CreateBatch("Commissions - " & sSageUserID, Format(Today, "dd/MM/yyyy"))
 
-            APINVOICE1header.RecordCreate(2)
-            APINVOICE1detail1.Cancel()
-            APINVOICE1headerFields.FieldByName("IDVEND").Value = "ADALAW"
-            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("7")
-            APINVOICE1header.Process()
+            ' loop through records
+            For Each sitm As ListViewItem In frmMain.ListView1.Items
+                Try
 
-            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("4")
-            APINVOICE1header.Process()
-            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
-            APINVOICE1headerFields.FieldByName("DATEINVC").Value = "01/03/2022"
-            APINVOICE1headerFields.FieldByName("IDINVC").Value = "12345a"
-            APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification("PO1")
-            APINVOICE1headerFields.FieldByName("TEXTTRX").Value = "1"  '
-            APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = "1100"
-
-            Temp = APINVOICE1detail1.Exists
-            APINVOICE1detail1.RecordCreate(0)
-            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-            APINVOICE1detail1.Process()
-            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-
-            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
-            APINVOICE1detail1.Insert()
-
-            APINVOICE1detail1.Read()
-
-            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = "1000"
-            APINVOICE1detail1.Update()
-            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-            APINVOICE1detail1.Read()
-            Temp = APINVOICE1detail1.Exists
-            APINVOICE1detail1.RecordCreate(0)
-            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-            APINVOICE1detail1.Process()
-            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-            APINVOICE1detail1.Read()
-            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
-            APINVOICE1header.Insert()
-            APINVOICE1batch.Read()
-            Temp = APINVOICE1header.Exists
-            APINVOICE1header.RecordCreate(2)
-            APINVOICE1detail1.Cancel()
+                    If sitm.Checked = True Then
+                        '
+                        ' TODO: Add a invoice record for each SalesPerson
+                        ' TODO:   Add a single line for all Comms
+                        ' TODO:   Add a line for each SO - Performance Bonus
+                        ' TODO:   Add a line for each SO - Finance Charges
 
 
+                        '   sSPCode = ""
+                        If sSPCode <> sitm.SubItems.Item(1).Text Or sSPCode = "" Then
 
+                            sSPCode = sitm.SubItems.Item(1).Text
+
+                            Dim txtVal As String
+
+                            txtVal = frmMain.ListView1.Items(rRow).SubItems(7).Text
+
+                            sSPCode = sitm.SubItems.Item(1).Text
+                            bFirstLine = True
+                            APINVOICE1batch.Process()
+                            APINVOICE1batchFields.FieldByName("CNTBTCH").Value = AP_InvBatch
+                            '            Temp = APINVOICE1header.Exists
+                            APINVOICE1batch.Read()
+                            APINVOICE1header.RecordCreate(2)
+                            APINVOICE1detail1.Cancel()
+                            APINVOICE1headerFields.FieldByName("IDVEND").Value = sitm.SubItems.Item(1).Text
+                            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("7")
+                            APINVOICE1header.Process()
+
+                            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("4")
+                            APINVOICE1header.Process()
+                            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+                            APINVOICE1headerFields.FieldByName("DATEINVC").Value = "01/03/2022"
+
+
+                            tempp = Format(System.DateTime.Now, "HH:mm:ss")
+
+                            APINVOICE1headerFields.FieldByName("IDINVC").Value = "12345c" & "-" & tempp
+                            APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification("PO1")
+                            APINVOICE1headerFields.FieldByName("TEXTTRX").Value = "1"  '
+                        End If
+
+                        If bFirstLine = True Then
+                            APINVOICE1detail1.Read()
+                            Temp = APINVOICE1detail1.Exists
+                            If Temp = True Then
+                                APINVOICE1detail1.Delete()
+                                APINVOICE1detail1.Process()
+                                APINVOICE1detail1.Read()
+                            End If
+                            bFirstLine = False
+                        End If
+
+
+                        '
+                        '
+                        '
+
+                        ' find total for comms $ value
+                        '  add a line
+                        ' add a line for each ORDNUMBER finance charges
+                        ' Add a 
+
+                        Temp = APINVOICE1detail1.Exists
+                        APINVOICE1detail1.RecordCreate(0)
+                        APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        APINVOICE1detail1.Process()
+                        APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        APINVOICE1detail1.Read()
+                        APINVOICE1detail1.RecordCreate(0)
+                        APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        APINVOICE1detail1.Process()
+                        APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
+                        APINVOICE1detail1.Insert()
+                        APINVOICE1detail1.Read()
+                        APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = "1000"
+                        dInvAmt += 1100
+                        APINVOICE1detail1.Update()
+                        APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        APINVOICE1detail1.Read()
+                        Temp = APINVOICE1detail1.Exists
+                        APINVOICE1detail1.RecordCreate(0)
+                        APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        APINVOICE1detail1.Process()
+                        APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        APINVOICE1detail1.Read()
+
+                        tempp = frmMain.ListView1.Items(rRow).SubItems(1).Text
+
+                        If sSPCode <> frmMain.ListView1.Items(rRow).SubItems(1).Text Then
+                            ''sitm.SubItems.selecteditem.index
+                            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+                            APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = dInvAmt
+                            dInvAmt = 0
+                            APINVOICE1header.Insert()
+                            APINVOICE1batch.Read()
+                            Temp = APINVOICE1header.Exists
+                            APINVOICE1header.RecordCreate(2)
+                            APINVOICE1detail1.Cancel()
+
+
+                        End If
+                        rRow = rRow + 1
+
+                    End If
+
+                Catch ex As Exception
+                    AccpacErrorHandler()
+                End Try
+                'APINVOICE3headerFields("ORDRNBR").PutWithoutVerification ("ORDNUM")
+            Next
 
         Catch ex As Exception
             AccpacErrorHandler()
         End Try
-        'APINVOICE3headerFields("ORDRNBR").PutWithoutVerification ("ORDNUM")
-
 
 
 
