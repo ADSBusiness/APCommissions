@@ -228,6 +228,7 @@ Public Class frmMain
             .Columns.Add("FieldTrainer", 65, HorizontalAlignment.Right)
             .Columns.Add("Comm", 80, HorizontalAlignment.Right)
             .Columns.Add("MComm", 80, HorizontalAlignment.Right)
+            .Columns.Add("FT", 80, HorizontalAlignment.Right)
 
 
         End With
