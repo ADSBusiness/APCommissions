@@ -256,13 +256,6 @@ Module SageConnect
                 Try
 
                     If sitm.Checked = True Then
-                        '
-                        ' TODO: Add a invoice record for each SalesPerson
-                        ' TODO:   Add a single line for all Comms
-                        ' TODO:   Add a line for each SO - Performance Bonus
-                        ' TODO:   Add a line for each SO - Finance Charges
-
-
                         '   sSPCode = ""
                         If sSPCode <> sitm.SubItems.Item(1).Text Or sSPCode = "" Then
 
@@ -308,15 +301,10 @@ Module SageConnect
                             End If
                             bFirstLine = False
                         End If
-
-
                         '
                         '
                         '
-
-
                         ' add a line for each ORDNUMBER Perf Bonus
-
                         If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
                             sOrdNumb = sitm.SubItems.Item(6).Text
                             Temp = APINVOICE1detail1.Exists
@@ -423,6 +411,7 @@ Module SageConnect
                             Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                             Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
 
+                            APINVOICE1detail1.Process()
                             APINVOICE1detail1.Insert()
                             APINVOICE1detail1.Read()
 
@@ -461,7 +450,7 @@ Module SageConnect
                             Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
                             Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                             Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
-
+                            APINVOICE1detail1.Process()
                             APINVOICE1detail1.Insert()
                             APINVOICE1detail1.Read()
                             dTotComm = Math.Round(FindTotalComms(sSPCode), 2)
@@ -502,7 +491,7 @@ Module SageConnect
                         Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
                         Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                         Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
-
+                        APINVOICE1detail1.Process()
                         APINVOICE1detail1.Insert()
                         APINVOICE1detail1.Read()
                         '  dTotComm = sitm.SubItems.Item(18).Text 'Math.Round(FindTotalComms(sSPCode), 2)
@@ -673,11 +662,7 @@ Module SageConnect
                 Try
 
                     If sitm.Checked = True Then
-                        '
-                        ' TODO: Add a invoice record for each SalesPerson
-                        ' TODO:   Add a single line for all Comms
-                        ' TODO:   Add a line for each SO - Performance Bonus
-                        ' TODO:   Add a line for each SO - Finance Charges
+
 
 
                         '   sSPCode = ""
@@ -892,12 +877,13 @@ Module SageConnect
 
     Function AddOptField(sOptFld As String, sOptValue As String)
         Try
-
+            'TODO: need to fix the detail line to record that opt fields exist - currently says NO
             APINVOICE1detail4.RecordCreate(0)
             APINVOICE1detail4Fields.FieldByName("OPTFIELD").Value = (sOptFld)                   ' Optional Field
             APINVOICE1detail4Fields.FieldByName("SWSET").Value = "1"                          ' Value Set
             APINVOICE1detail4Fields.FieldByName("VALIFTEXT").Value = (sOptValue)                   ' Text Value
             APINVOICE1detail4.Insert()
+            APINVOICE1detail1.Update()
         Catch ex As Exception
 
         End Try
