@@ -42,10 +42,11 @@ Public Class frmMain
     '                                           Tidy code and objects
     '                                           Build Sage AP Inv Batch Creation OBject
     '20220328.1545    ADS       28/03/2022      Adjust for correct AP INV entry
+    '20220404.1045    ADS       04/04/2022      create OptFields for AP Details  
     '
     '
 
-    Public BuildVersion As String = "20220328.1545"
+    Public BuildVersion As String = "20220404.1045"
 
 
 
