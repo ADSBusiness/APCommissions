@@ -43,7 +43,7 @@ Public Class frmMain
     '                                           Build Sage AP Inv Batch Creation OBject
     '20220328.1545    ADS       28/03/2022      Adjust for correct AP INV entry
     '20220404.1045    ADS       04/04/2022      create OptFields for AP Details  
-    '
+    '20220406.0815    ADS       06/04/2022      Adjust OptFlds compose to correctly add details
     '
 
     Public BuildVersion As String = "20220404.1045"
