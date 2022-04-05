@@ -121,7 +121,17 @@ Module SageConnect
             APINVOICE1detail3.Compose(APInvBatchDetail3)
             'APINVOICE1detail4.Compose Array(APINVOICE1detail1)
             APInvBatchDetail4(0) = APINVOICE1detail1
-            APINVOICE1detail4.Compose(APInvBatchDetail1)
+            '            APINVOICE1detail4.Compose(APInvBatchDetail1)
+            APINVOICE1detail4.Compose(APINVOICE1detail1)
+
+            '            APINVOICE1batch.Compose Array(APINVOICE1header)
+            '           APINVOICE1header.Compose Array(APINVOICE1batch, APINVOICE1detail1, APINVOICE1detail2, APINVOICE1detail3)
+            '          APINVOICE1detail1.Compose Array(APINVOICE1header, APINVOICE1batch, APINVOICE1detail4)
+            '         APINVOICE1detail2.Compose Array(APINVOICE1header)
+            '        APINVOICE1detail3.Compose Array(APINVOICE1header)
+            '       APINVOICE1detail4.Compose Array(APINVOICE1detail1)
+
+
 
 
             DeclareViews = True
@@ -277,9 +287,14 @@ Module SageConnect
                             APINVOICE1headerFields.FieldByName("IDVEND").Value = sitm.SubItems.Item(1).Text
                             APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("7")
                             APINVOICE1header.Process()
-
+                            APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("7")
+                            APINVOICE1header.Process()
                             APINVOICE1headerFields.FieldByName("Processcmd").PutWithoutVerification("4")
                             APINVOICE1header.Process()
+
+
+
+
                             APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
                             APINVOICE1headerFields.FieldByName("DATEINVC").Value = "01/03/2022"
 
@@ -411,7 +426,7 @@ Module SageConnect
                             Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                             Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
 
-                            APINVOICE1detail1.Process()
+                            'APINVOICE1detail1.Process()
                             APINVOICE1detail1.Insert()
                             APINVOICE1detail1.Read()
 
@@ -450,7 +465,8 @@ Module SageConnect
                             Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
                             Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                             Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
-                            APINVOICE1detail1.Process()
+
+                            'APINVOICE1detail1.Process()
                             APINVOICE1detail1.Insert()
                             APINVOICE1detail1.Read()
                             dTotComm = Math.Round(FindTotalComms(sSPCode), 2)
@@ -491,7 +507,8 @@ Module SageConnect
                         Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
                         Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
                         Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
-                        APINVOICE1detail1.Process()
+
+                        'APINVOICE1detail1.Process()
                         APINVOICE1detail1.Insert()
                         APINVOICE1detail1.Read()
                         '  dTotComm = sitm.SubItems.Item(18).Text 'Math.Round(FindTotalComms(sSPCode), 2)
@@ -878,14 +895,25 @@ Module SageConnect
     Function AddOptField(sOptFld As String, sOptValue As String)
         Try
             'TODO: need to fix the detail line to record that opt fields exist - currently says NO
+            APINVOICE1detail4.RecordClear()
             APINVOICE1detail4.RecordCreate(0)
             APINVOICE1detail4Fields.FieldByName("OPTFIELD").Value = (sOptFld)                   ' Optional Field
             APINVOICE1detail4Fields.FieldByName("SWSET").Value = "1"                          ' Value Set
-            APINVOICE1detail4Fields.FieldByName("VALIFTEXT").Value = (sOptValue)                   ' Text Value
+            APINVOICE1detail4Fields.FieldByName("VALIFTEXT").Value = (sOptValue)                    ' Text Value
             APINVOICE1detail4.Insert()
-            APINVOICE1detail1.Update()
-        Catch ex As Exception
+            APINVOICE1detail4Fields.FieldByName("OPTFIELD").PutWithoutVerification(sOptFld)   ' Optional Field
+            APINVOICE1detail4.Read()
 
+
+
+            '            APINVOICE1detail4.RecordCreate(0)
+            '           APINVOICE1detail4Fields.FieldByName("OPTFIELD").Value = (sOptFld)                   ' Optional Field
+            '          APINVOICE1detail4Fields.FieldByName("SWSET").Value = "1"                          ' Value Set
+            '         APINVOICE1detail4Fields.FieldByName("VALIFTEXT").Value = (sOptValue)                   ' Text Value
+            '        APINVOICE1detail4.Insert()
+            '       APINVOICE1detail1.Update()
+        Catch ex As Exception
+            MsgBox("optfld error")
         End Try
 
 
