@@ -34,7 +34,8 @@ Public Class frmMain
     Public LogFile As String = System.Windows.Forms.Application.StartupPath & "APComm - " & Format(Now, "yyyyMMdd") & ".txt"
     Public strLogLine As String = ""
 
-
+    Public Shared iItems As Integer = 0
+    Public Shared EffDate As String
     Public bDebug As Boolean = False
 
     '20220309.1930    ADS      09/03/2022       Initial Release Of APCommissions
@@ -71,6 +72,7 @@ Public Class frmMain
         Dim sItm As ListViewItem
 
         Dim Sdte As String = Me.dteExpDate.Value.ToString("yyyyMMdd")
+        EffDate = Sdte
 
         Dim A4W As New SqlConnection()
         Dim SQLConStr As String = "Server=" & sqlServer & ";Database=" & sqlDB & ";User ID=" & sqlUser & ";Password=" & sqlPswd
@@ -123,6 +125,7 @@ Public Class frmMain
                 sItm = New ListViewItem(lView)
                 ListView1.Items.Add(sItm)
                 ListView1.Items(lRow).UseItemStyleForSubItems = False
+                ListView1.Items(lRow).Checked = True
 
                 intCount += 1
                 lRow += 1
@@ -130,6 +133,7 @@ Public Class frmMain
 
             End While
             Me.Label5.Text = lRow
+            iItems = lRow
 
             Sql_APComms.Close()
             vAPComms.Dispose()

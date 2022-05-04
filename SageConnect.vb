@@ -121,7 +121,7 @@ Module SageConnect
             APINVOICE1detail3.Compose(APInvBatchDetail3)
             'APINVOICE1detail4.Compose Array(APINVOICE1detail1)
             APInvBatchDetail4(0) = APINVOICE1detail1
-            APINVOICE1detail4.Compose(APINVOICE1detail4)
+            APINVOICE1detail4.Compose(APINVOICE1detail1)
 
             '            APINVOICE1batch.Compose Array(APINVOICE1header)
             '           APINVOICE1header.Compose Array(APINVOICE1batch, APINVOICE1detail1, APINVOICE1detail2, APINVOICE1detail3)
@@ -255,11 +255,12 @@ Module SageConnect
         Dim dInvAmt As Double = 0
         Dim dTotComm As Double
         Dim rRow As Integer
+        Dim ItemsNew As Integer
+
         Dim tempp As String
         rRow = 1
         Try
             Dim AP_InvBatch As String = Sage_AP_CreateBatch("Commissions - " & sSageUserID, Format(Today, "dd/MM/yyyy"))
-
             ' loop through records
             For Each sitm As ListViewItem In frmMain.ListView1.Items
                 Try
@@ -270,9 +271,9 @@ Module SageConnect
 
                             sSPCode = sitm.SubItems.Item(1).Text
                             sOrdNumb = ""
-                            Dim txtVal As String
+                            'Dim txtVal As String
 
-                            txtVal = frmMain.ListView1.Items(rRow).SubItems(7).Text
+                            'txtVal = frmMain.ListView1.Items(rRow).SubItems(7).Text
 
                             sSPCode = sitm.SubItems.Item(1).Text
                             bFirstLine = True
@@ -292,16 +293,13 @@ Module SageConnect
                             APINVOICE1header.Process()
 
 
-
-
                             APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
-                            APINVOICE1headerFields.FieldByName("DATEINVC").Value = "01/03/2022"
+                            APINVOICE1headerFields.FieldByName("DATEINVC").Value = frmMain.dteExpDate.Value
 
 
                             tempp = Format(System.DateTime.Now, "HH:mm:ss")
-                            ' TODO: change the IDINVC value to suitable for real data
-                            APINVOICE1headerFields.FieldByName("IDINVC").Value = "12345c" & "-" & tempp
-                            APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification("PO1")
+                            APINVOICE1headerFields.FieldByName("IDINVC").Value = "INV-" & frmMain.EffDate
+                            APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification(tempp)
                             APINVOICE1headerFields.FieldByName("TEXTTRX").Value = "1"  '
                         End If
 
@@ -530,11 +528,24 @@ Module SageConnect
                         '
                         '
                         '
+                        ItemsNew = frmMain.iItems
 
-                        tempp = frmMain.ListView1.Items(rRow).SubItems(1).Text
+                        ' tempp = frmMain.ListView1.Items(rRow).SubItems(1).Text
+                        If rRow < ItemsNew Then
+                            If sSPCode <> frmMain.ListView1.Items(rRow).SubItems(1).Text Then
+                                ''sitm.SubItems.selecteditem.index
+                                APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+                                APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = dInvAmt
+                                dInvAmt = 0
+                                APINVOICE1header.Insert()
+                                APINVOICE1batch.Read()
+                                Temp = APINVOICE1header.Exists
+                                APINVOICE1header.RecordCreate(2)
+                                APINVOICE1detail1.Cancel()
 
-                        If sSPCode <> frmMain.ListView1.Items(rRow).SubItems(1).Text Then
-                            ''sitm.SubItems.selecteditem.index
+                            End If
+
+                        Else
                             APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
                             APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = dInvAmt
                             dInvAmt = 0
@@ -546,8 +557,8 @@ Module SageConnect
 
 
                         End If
+                        frmMain.ListView1.Items(rRow - 1).Checked = False
                         rRow = rRow + 1
-
                     End If
 
                 Catch ex As Exception
