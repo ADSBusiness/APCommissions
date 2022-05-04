@@ -121,8 +121,7 @@ Module SageConnect
             APINVOICE1detail3.Compose(APInvBatchDetail3)
             'APINVOICE1detail4.Compose Array(APINVOICE1detail1)
             APInvBatchDetail4(0) = APINVOICE1detail1
-            '            APINVOICE1detail4.Compose(APInvBatchDetail1)
-            APINVOICE1detail4.Compose(APINVOICE1detail1)
+            APINVOICE1detail4.Compose(APINVOICE1detail4)
 
             '            APINVOICE1batch.Compose Array(APINVOICE1header)
             '           APINVOICE1header.Compose Array(APINVOICE1batch, APINVOICE1detail1, APINVOICE1detail2, APINVOICE1detail3)
@@ -534,22 +533,22 @@ Module SageConnect
 
                         tempp = frmMain.ListView1.Items(rRow).SubItems(1).Text
 
-                            If sSPCode <> frmMain.ListView1.Items(rRow).SubItems(1).Text Then
-                                ''sitm.SubItems.selecteditem.index
-                                APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
-                                APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = dInvAmt
-                                dInvAmt = 0
-                                APINVOICE1header.Insert()
-                                APINVOICE1batch.Read()
-                                Temp = APINVOICE1header.Exists
-                                APINVOICE1header.RecordCreate(2)
-                                APINVOICE1detail1.Cancel()
+                        If sSPCode <> frmMain.ListView1.Items(rRow).SubItems(1).Text Then
+                            ''sitm.SubItems.selecteditem.index
+                            APINVOICE1headerFields.FieldByName("TAXCLASS1").Value = "1"
+                            APINVOICE1headerFields.FieldByName("AMTGROSTOT").Value = dInvAmt
+                            dInvAmt = 0
+                            APINVOICE1header.Insert()
+                            APINVOICE1batch.Read()
+                            Temp = APINVOICE1header.Exists
+                            APINVOICE1header.RecordCreate(2)
+                            APINVOICE1detail1.Cancel()
 
-
-                            End If
-                            rRow = rRow + 1
 
                         End If
+                        rRow = rRow + 1
+
+                    End If
 
                 Catch ex As Exception
                     AccpacErrorHandler()
