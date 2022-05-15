@@ -260,7 +260,7 @@ Module SageConnect
         Dim tempp As String
         rRow = 1
         Try
-            Dim AP_InvBatch As String = Sage_AP_CreateBatch("Commissions - " & sSageUserID, Format(Today, "dd/MM/yyyy"))
+            Dim AP_InvBatch As String = Sage_AP_CreateBatch("Sales Commissions TEST - " & sSageUserID, Format(Today, "dd/MM/yyyy"))
             ' loop through records
             For Each sitm As ListViewItem In frmMain.ListView1.Items
                 Try
