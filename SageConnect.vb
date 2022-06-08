@@ -317,173 +317,132 @@ Module SageConnect
                         '
                         '
                         ' add a line for each ORDNUMBER Perf Bonus
-                        If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
-                            sOrdNumb = sitm.SubItems.Item(6).Text
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
+                        'If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
+                        '    sOrdNumb = sitm.SubItems.Item(6).Text
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
 
-                            sSPState = FindSPState(sSPCode)
-                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "62060-" & Trim(sSPState) & "-3"
-                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = Trim(sOrdNumb) & " - Bonus"
+                        '    sSPState = FindSPState(sSPCode)
+                        '    APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "62060-" & Trim(sSPState) & "-3"
+                        '    APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = Trim(sOrdNumb) & " - Bonus"
 
-                            'Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
-                            'Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
-                            'Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
-                            'Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
-                            'Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
-                            'Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
-                            'Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
+                        '    'Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
+                        '    'Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
+                        '    'Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
+                        '    'Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
+                        '    'Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
+                        '    'Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
+                        '    'Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
 
-                            APINVOICE1detail1.Insert()
-                            APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1.Insert()
+                        '    APINVOICE1detail1.Read()
 
-                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            ' dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            APINVOICE1detail1.Update()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    ' dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    APINVOICE1detail1.Update()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
 
-                            ' add a line for each ORDNUMBER Finance Charges
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
+                        '    ' add a line for each ORDNUMBER Finance Charges
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
 
-                            'sSPState = FindSPState(sSPCode)
-                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
-                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = Trim(sOrdNumb) & " - Finance"
+                        '    'sSPState = FindSPState(sSPCode)
+                        '    APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
+                        '    APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = Trim(sOrdNumb) & " - Finance"
 
-                            'Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
-                            'Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
-                            'Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
-                            'Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
-                            'Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
-                            'Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
-                            'Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
+                        '    'Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
+                        '    'Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
+                        '    'Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
+                        '    'Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
+                        '    'Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
+                        '    'Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
+                        '    'Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
 
-                            APINVOICE1detail1.Insert()
-                            APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1.Insert()
+                        '    APINVOICE1detail1.Read()
 
-                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            APINVOICE1detail1.Update()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-
-
-                        End If
+                        '    APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    APINVOICE1detail1.Update()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
 
 
-                        If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
-                            sOrdNumb = sitm.SubItems.Item(6).Text
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            ' TODO: Determine SP State and adjust GL Code for perf bonus
-                            sSPState = FindSPState(sSPCode)
-                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
-                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb & " - " & sitm.SubItems.Item(5).Text
+                        'End If
 
-                            Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
-                            Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
-                            Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
-                            Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
-                            Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
-                            Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
-                            Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
-                            Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
 
-                            'APINVOICE1detail1.Process()
-                            APINVOICE1detail1.Insert()
-                            APINVOICE1detail1.Read()
+                        'If (sOrdNumb <> sitm.SubItems.Item(6).Text) And (sSPCode = sitm.SubItems.Item(1).Text) Then
+                        '    sOrdNumb = sitm.SubItems.Item(6).Text
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    ' TODO: Determine SP State and adjust GL Code for perf bonus
+                        '    sSPState = FindSPState(sSPCode)
+                        '    APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "50950-" & Trim(sSPState) & "-3"
+                        '    APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb & " - " & sitm.SubItems.Item(5).Text
 
-                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            ' dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
-                            APINVOICE1detail1.Update()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                        End If
+                        '    Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
+                        '    Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
+                        '    Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
+                        '    Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
+                        '    Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
+                        '    Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
+                        '    Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
+                        '    Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
 
-                        If bFirstDetail = True Then
-                            ' find total for comms $ value and add a single line
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
-                            APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb & " - Total"
+                        '    'APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1.Insert()
+                        '    APINVOICE1detail1.Read()
 
-                            Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
-                            Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
-                            Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
-                            Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
-                            Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
-                            Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
-                            Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
-                            Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
+                        '    APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    ' dInvAmt += 0 'frmMain.ListView1.Items(rRow).SubItems(18).Text
+                        '    APINVOICE1detail1.Update()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        '    Temp = APINVOICE1detail1.Exists
+                        '    APINVOICE1detail1.RecordCreate(0)
+                        '    APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        '    APINVOICE1detail1.Process()
+                        '    APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        '    APINVOICE1detail1.Read()
+                        'End If
 
-                            'APINVOICE1detail1.Process()
-                            APINVOICE1detail1.Insert()
-                            APINVOICE1detail1.Read()
-                            dTotComm = Math.Round(FindTotalComms(sSPCode), 2)
-                            APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = dTotComm
-                            dInvAmt += dTotComm
-                            APINVOICE1detail1.Update()
-                            dInvAmt += APINVOICE1detail1Fields.FieldByName("AMTTAX1").Value
-
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-                            Temp = APINVOICE1detail1.Exists
-                            APINVOICE1detail1.RecordCreate(0)
-                            APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
-                            APINVOICE1detail1.Process()
-                            APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
-                            APINVOICE1detail1.Read()
-
-                            bFirstDetail = False
-                        End If
-
+                        sOrdNumb = sitm.SubItems.Item(6).Text
+                        'If bFirstDetail = True Then
+                        ' find total for comms $ value and add a single line
                         Temp = APINVOICE1detail1.Exists
                         APINVOICE1detail1.RecordCreate(0)
                         APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
@@ -493,8 +452,10 @@ Module SageConnect
                         APINVOICE1detail1.RecordCreate(0)
                         APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
                         APINVOICE1detail1.Process()
-                        APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
-                        APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb
+                        sSPState = FindSPState(sSPCode)
+                        APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "62060-" & Trim(sSPState) & "-3"
+                        'APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
+                        APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb & " - " & sitm.SubItems.Item(7).Text
 
                         Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
                         Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
@@ -508,10 +469,12 @@ Module SageConnect
                         'APINVOICE1detail1.Process()
                         APINVOICE1detail1.Insert()
                         APINVOICE1detail1.Read()
-                        '  dTotComm = sitm.SubItems.Item(18).Text 'Math.Round(FindTotalComms(sSPCode), 2)
-                        APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = (0) 'dTotComm
-                        ' dInvAmt += dTotComm
+                        dTotComm = Math.Round(CDbl(sitm.SubItems.Item(18).Text), 2) 'Math.Round(FindTotalComms(sSPCode), 2)
+                        APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = dTotComm
+                        dInvAmt += dTotComm
                         APINVOICE1detail1.Update()
+                        dInvAmt += APINVOICE1detail1Fields.FieldByName("AMTTAX1").Value
+
                         APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
                         APINVOICE1detail1.Read()
                         Temp = APINVOICE1detail1.Exists
@@ -521,9 +484,49 @@ Module SageConnect
                         APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
                         APINVOICE1detail1.Read()
 
-                        '
-                        '  AP Detail Opt Fields
-                        'APINVOICE3header.Process
+                        bFirstDetail = False
+                        ' End If
+
+                        'Temp = APINVOICE1detail1.Exists
+                        'APINVOICE1detail1.RecordCreate(0)
+                        'APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        'APINVOICE1detail1.Process()
+                        'APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        'APINVOICE1detail1.Read()
+                        'APINVOICE1detail1.RecordCreate(0)
+                        'APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        'APINVOICE1detail1.Process()
+                        'APINVOICE1detail1Fields.FieldByName("IDGLACCT").Value = "30200-3"
+                        'APINVOICE1detail1Fields.FieldByName("TEXTDESC").Value = sOrdNumb
+
+                        'Call AddOptField("APORD", sitm.SubItems.Item(6).Text)
+                        'Call AddOptField("APCUST", sitm.SubItems.Item(3).Text)
+                        'Call AddOptField("APTYPE", sitm.SubItems.Item(14).Text)
+                        'Call AddOptField("APSRCE", sitm.SubItems.Item(15).Text)
+                        'Call AddOptField("APFT", sitm.SubItems.Item(19).Text)
+                        'Call AddOptField("APSPLIT", sitm.SubItems.Item(17).Text)
+                        'Call AddOptField("APAMT", sitm.SubItems.Item(18).Text)
+                        'Call AddOptField("APITEM", sitm.SubItems.Item(7).Text)
+
+                        ''APINVOICE1detail1.Process()
+                        'APINVOICE1detail1.Insert()
+                        'APINVOICE1detail1.Read()
+                        ''  dTotComm = sitm.SubItems.Item(18).Text 'Math.Round(FindTotalComms(sSPCode), 2)
+                        'APINVOICE1detail1Fields.FieldByName("AMTDIST").Value = (0) 'dTotComm
+                        '' dInvAmt += dTotComm
+                        'APINVOICE1detail1.Update()
+                        'APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        'APINVOICE1detail1.Read()
+                        'Temp = APINVOICE1detail1.Exists
+                        'APINVOICE1detail1.RecordCreate(0)
+                        'APINVOICE1detail1Fields.FieldByName("PROCESSCMD").PutWithoutVerification("0")
+                        'APINVOICE1detail1.Process()
+                        'APINVOICE1detail1Fields.FieldByName("CNTLINE").PutWithoutVerification("-1")
+                        'APINVOICE1detail1.Read()
+
+
+                        '                     AP Detail Opt Fields
+                        '                     APINVOICE3header.Process
 
                         '
                         '
