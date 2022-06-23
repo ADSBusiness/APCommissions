@@ -298,7 +298,7 @@ Module SageConnect
 
 
                             tempp = Format(System.DateTime.Now, "HH:mm:ss")
-                            APINVOICE1headerFields.FieldByName("IDINVC").Value = "INV-" & frmMain.EffDate
+                            APINVOICE1headerFields.FieldByName("IDINVC").Value = "INV-" & frmMain.EffDate & "-" & sitm.SubItems.Item(1).Text
                             APINVOICE1headerFields.FieldByName("PONBR").PutWithoutVerification(tempp)
                             APINVOICE1headerFields.FieldByName("TEXTTRX").Value = "1"  '
                         End If
