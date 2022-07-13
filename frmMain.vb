@@ -55,7 +55,7 @@ Public Class frmMain
 
     Sub LoadGrid()
 
-
+        '
 
         If ListView1.Items.Count > 0 Then
             ListView1.Items.Clear()
