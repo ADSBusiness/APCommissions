@@ -244,6 +244,7 @@ Public Class frmMain
             ListView1.Items.Clear()
         End If
 
+
         Me.Label5.Text = ""
         'Me.Label6.Text = ""
 
