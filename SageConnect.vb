@@ -165,6 +165,8 @@ Module SageConnect
             APINVOICE1batch.Update()
             APINVOICE1batchFields.FieldByName("DATEBTCH").Value = (sBtchDate)
             APINVOICE1batch.Update()
+            APINVOICE1batchFields.FieldByName("SRCEAPPL").PutWithoutVerification("CM")     ' Process Command Code
+            APINVOICE1batch.Update()
             APINVOICE1batch.Read()
             Sage_AP_CreateBatch = APINVOICE1batchFields.FieldByName("CNTBTCH").Value
             APBatch = APINVOICE1batchFields.FieldByName("CNTBTCH").Value

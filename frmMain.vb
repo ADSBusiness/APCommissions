@@ -47,8 +47,9 @@ Public Class frmMain
     '20220406.0815    ADS       06/04/2022      Adjust OptFlds compose to correctly add details
     '20220509.1045    ADS       09/05/2022      Tidy and streamline batch creation process
     '20220622.1545    ADS       22/06/2022      elease for LIVE
+    '20240314.1045    ADS       14/03/2024      Adjust BatchCreate for SRCAPPL=CM - accomodate APWorkflow
 
-    Public BuildVersion As String = "20220622.1545"
+    Public BuildVersion As String = "20240314.1045"
 
     'TODO:  Add Record counters to show # entries, and total $ (hence balance to imports)
 
